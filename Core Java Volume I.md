@@ -11,11 +11,45 @@
 ## 优点
 + 简单性：是C++语法的"纯净版"，没有头文件、指针、结构、联合、操作符重载、虚基类，文件小（小型机）
 + 面向对象：重点在对象（数据），用接口(interface)取代多重继承，是没有很麻烦的多重继承的，运行时自省。
-> 但是也只能写面向对象diam，除非用groovy或者kotlin等可以写脚本
+> 但是也只能写面向对象代码，除非用groovy或者kotlin等可以写脚本
 + 健壮性：消除重写内存和损坏数据可能性。
-> 但是有各种OOM要处理
-+ 安全性
+> 但是有各种OOM要处理，或者要预先配好jvm的内存占用。高版本似乎改善了
 + 体系中立：字节码，带来了可移植性(int 固定为4字节)，所有数值类型占有字节与平台无关
 + 即时编译(早期java是解释型)
 + 高性能：由编译器消除函数调用（即“内联”）
 + 动态性（但实际是静态语言）
+
+## Hello World
+1.JDK，开发工具；JRE，运行环境 
+
+2.环境变量：JAVA_HOME=.../bin;   PATH = $JAVA_HOME:$PATH
+
+3.编译运行
+```
+javac Welcome.java   //生成.class文件（字节码）
+java Welcome         //不要.class后缀
+```
+
+4 .源代码的文件名必须与公共类的名字相同，并用.java后缀
+> kotlin似乎不用
+
+5.一个文件只能一个公共类 
+> 若有多个公共类，编译成class时就混乱了。可以想像js的export default，形成默认的暴露
+
+6.每个Java程序必须有一个main方法，而且是public static的
+> idea快捷键 psvm
+
+7.代码块{}
+```java
+public class ClassName{
+	public static void main(String [] args){
+    	program statements;}
+}
+```
+
+8.所有函数都属于某个类，main必须有一个外壳类
+
+9.println换行，print不换行
+> idea快捷键 sout
+
+10.注释： //行注释，/*...*/块注释，/\*\*.../文档字符串注释
