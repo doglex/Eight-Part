@@ -53,3 +53,33 @@ public class ClassName{
 > idea快捷键 sout
 
 10.注释： //行注释，/*...*/块注释，/\*\*.../文档字符串注释
+
+## 八种基本类型(primitive type)
+1.四种整型 
++ int
++ short
++ long
++ byte
+```
+长整型后缀L或l
+十六进制前缀0x或0X
+八进制前缀0
+二进制前缀0B或0b
+允许下划线 (_000_000) 区分
+原码(0正1负，符号位;)
+反码(正不变；负符号位不变，其余反)，存储在计算机内部
+补码(正不变；负的反码加一)
+```
+
+2.两种浮点型
++ float，后缀f或F
++ double，后缀d或D //默认是double型
+```
+三个特殊值Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY,Double.NaN (0/0,负数平方根，判断用Double.isNaN)
+```
+
+3.char类型用单引号'A',unicode编码，占两个字节（C++中一个字节）
+从 \u0000到\uffff，要当心不要在注释中出现\u
+**不要在程序中使用char类型，除非确实需要处理UTF-16单元，最好用String抽象数据类型**
+
+4.boolean类型：false和true。安全性，不能与整型隐式转换(C++中是可以)
