@@ -198,4 +198,48 @@ case 2:...;break;
 default:...;break;}
 //要注意break，不然会穿透
 //标签可以char，byte，short，int，enum，String
+break 加标签可跳出多层循环/或任何块
+continue 加标签，跳到块首
+return 直接返回
+> 书中建议尽量不用break，continue进行编程
 ```
+
+## 其他类型
++ 大数值: BigInteger,BigDecimal //import java.math，有add、multiply函数
++ 数组 （[]与Array）
+```
+(1)int [] a = new int [100] 
+//索引0-index，用[]访问 (堆上创建、栈上引用)
+//固定大小，扩容须拷贝到另一个数组（0.75倍增长）
+// 必须是同一类型元素，而python中则可以多种元素
+(2)foreach 迭代（循环）
+for(int e:a){;}  //必须是数组或实现了Iterable 接口的对象
+(3)初始化
+int [] small = {1,2,3,4}; //隐藏了new
+重新初始化 small = new int [] {1,4}  //因为还是数组指针
+//允许长度为0，与null不同
+(4)数组拷贝
+允许重复引用  int [] a = b;
+深拷贝  int copied = Arrays.copyOf(lucky,lucky,length)
+(5)命令行参数
+psvm(String [] args)
+(6)数组排序
+Arrays.sort() 
+集合类型有 Collections.sort()
+//Arrays具体，Array抽象
+//基本类型，三路快排/双基快排，小的部分用插入；对象类型，用归并排序。
+//python中有sorted，带key的sortedd
+(7)Arrays API：toString,copyOf,copyOfRange,binarySearch,fill(填充某个值),equals(比较数组各元素)
+(8)多维数组
+int  [][] square = new int [][] {{1,2,3,4},{1,2,3,4},{1,2,3,4},{1,2,3,4},{1,2,3,4}} ;
+或者 int  [][] square =  {{1,2,3,4},{1,2,3,4},{1,2,3,4},{1,2,3,4},{1,2,3,4}} ;//用[][]访问
+//axis=0，先行后列
+for (double [] row = a ) for (double value:row){;}
+//实际上是一维数组的
+//不等长数组
+int [][] odds = new int [NMAX][];
+for (int n=0; n小于 NMAX;n++) odds [n] = new int[n+1];
+```
+
+
+
