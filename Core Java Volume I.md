@@ -1,45 +1,59 @@
 ## 权限
+
 - public 公共可见
 - private 自己可见(即，封装起来setter、getter)
 - protected 自己、子孙（有些子孙不是本包的）、本包可见
 - 默认 本包可见
 
 ## 内存的栈区和堆区
-- 栈区(Stack)：一般速度快，线程内使用。当前方法，局部变量，基本类型。
-- 堆区(Heap): 比较慢（要保证多线程间安全）。有常量池，方法代码，静态方法，对象。
+
+- 栈区(Stack)：一般速度快，线程内使用(线程独立)。当前方法，局部变量，基本类型。
+- 堆区(Heap): 比较慢（跨线程的）。有常量池，方法代码，静态方法，对象。
+> 静态变量是线程不安全，因为是跨实例共享的
 
 ## 优点
+
 + 简单性：是C++语法的"纯净版"，没有头文件、指针、结构、联合、操作符重载、虚基类，文件小（小型机）
 + 面向对象：重点在对象（数据），用接口(interface)取代多重继承，是没有很麻烦的多重继承的，运行时自省。
+
 > 但是也只能写面向对象代码，除非用groovy或者kotlin等可以写脚本
+
 + 健壮性：消除重写内存和损坏数据可能性。
+
 > 但是有各种OOM要处理，或者要预先配好jvm的内存占用。高版本似乎改善了
+
 + 体系中立：字节码，带来了可移植性(int 固定为4字节)，所有数值类型占有字节与平台无关
 + 即时编译(早期java是解释型)
 + 高性能：由编译器消除函数调用（即“内联”）
 + 动态性（但实际是静态语言）
 
 ## Hello World
-1.JDK，开发工具；JRE，运行环境 
+
+1.JDK，开发工具；JRE，运行环境
 
 2.环境变量：JAVA_HOME=.../bin;   PATH = $JAVA_HOME:$PATH
 
 3.编译运行
+
 ```
 javac Welcome.java   //生成.class文件（字节码）
 java Welcome         //不要.class后缀
 ```
 
 4 .源代码的文件名必须与公共类的名字相同，并用.java后缀
+
 > kotlin似乎不用
 
-5.一个文件只能一个公共类 
+5.一个文件只能一个公共类
+
 > 若有多个公共类，编译成class时就混乱了。可以想像js的export default，形成默认的暴露
 
 6.每个Java程序必须有一个main方法，而且是public static的
+
 > idea快捷键 psvm
 
 7.代码块{}
+
 ```java
 public class ClassName{
 	public static void main(String [] args){
@@ -50,16 +64,20 @@ public class ClassName{
 8.所有函数都属于某个类，main必须有一个外壳类
 
 9.println换行，print不换行
+
 > idea快捷键 sout
 
 10.注释： //行注释，/*...*/块注释，/\*\*.../文档字符串注释
 
 ## 八种基本类型(primitive type)
-1.四种整型 
+
+1.四种整型
+
 + int
 + short
 + long
 + byte
+
 ```
 长整型后缀L或l
 十六进制前缀0x或0X
@@ -72,8 +90,10 @@ public class ClassName{
 ```
 
 2.两种浮点型
+
 + float，后缀f或F
 + double，后缀d或D //默认是double型
+
 ```
 三个特殊值Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY,Double.NaN (0/0,负数平方根，判断用Double.isNaN)
 ```
@@ -85,9 +105,11 @@ public class ClassName{
 4.boolean类型：false和true。安全性，不能与整型隐式转换(C++中是可以)
 
 ## 变量
+
 1.逐一声明变量可以提高可读性
 
 2.初始化（使用前必须初始化,更安全，explicti is better than implicit）
+
 ```
 int a = 12; //栈区不须new
 int a; a = 12;
@@ -96,9 +118,11 @@ Map <String, Integer> map = new HashMap<>(); //堆区，非基本类型，对象
 
 3.常量：用final表示只能被赋值一次
 一般设大写，一般是static final，让类内共用，外部再加public
->static静态（共用）：一开始就初始化，类拥有，不是对象拥有。static方法只能调static属性或者方法，因为非static是实例化后的对象所拥有的。（有特例，比如String，可以调）
+
+> static静态（共用）：一开始就初始化，类拥有，不是对象拥有。static方法只能调static属性或者方法，因为非static是实例化后的对象所拥有的。（有特例，比如String，可以调）
 
 4.运算符
+
 + 地板除（整数除）
 + 除零异常，浮点数除0得无穷大或者NaN
 + 异或A^B^A = B, A^A =0
@@ -107,6 +131,7 @@ Map <String, Integer> map = new HashMap<>(); //堆区，非基本类型，对象
 在Math类中。要严格的话用StrictMath。
 
 6.类型转换(cast)
+
 + 小到大自动转换（仅在运算到时）
 + 强制类型转换（int）(Math.round(x))
 + 布尔类型转换请用三元运算  ?:
@@ -114,46 +139,62 @@ Map <String, Integer> map = new HashMap<>(); //堆区，非基本类型，对象
 7.结合运算符 +=,*=
 
 8.自增，自减 ++i，i++,--i,i--(先后使用i)
+
 > 请确保i是可修改的。建议不要使用，以免产生疑惑，提高代码可读性
 
 9.逻辑
 ==, equals（字符串，浮点，isNaN）,> ,>= ,&& ,|| ,?:
 == 是内存地址判断，equals由自定义类的equals方法，同时修改hashcode方法
+
 > 请特别注意equals，因为python中字符串比较用==即可
 
 10.运算符优先级
+
 > 建议始终使用括号，不要在脑中想半天哪个左边优先级高还是右边。提高代码可读性
 
 ## 字符串String类型
+
 + 是final的，不可被继承
 + 不是Primitive Type，内容在常量区(属于堆区),引用在栈区。
+
 > 优点：编译器可以让字符串共享。(回收是自动的，有强引用，弱引用，软引用，虚引用).设计者认为共享带来的高效率远胜于提取、拼接字符串带来的低效率
+
 + 用双引号可以不用ne
 + 子串substring(start,end+1)创建了一个新串
 + 支持+号。将其他类型与字符串拼接，自动变字符串(或者Autoboxing后有toString方法)。常用于输出语句。
-System.out.println(1+2+"hello"+3+4); 输出3hello34（加号的结合性）
+  System.out.println(1+2+"hello"+3+4); 输出3hello34（加号的结合性）
 + 多个拼接用String.join
+
 > String.join(",","S","M","L")  //用逗号拼接
 
 > python中用",".join(...)其中是可迭代内容就行，但是要求各元素是str
+
 + 单线程频繁拼接用StringBuilder
+
 > StringBuilder -> append -> toString
+
 + 需要多线程的拼接用StringBuffer，是线程安全的
+
 > StringBuffer 线程安全，但是慢
+
 + 检测字符串相等用equals。需要非常注意，好在IDE会提示
 + 空串与null串
+
 ```
 空串检测：  str.length() == 0 或 str.equals("")
 null串：   str ！= null && str.length() !=0   //在null上调用方法会出错
 ```
+
 > 这个很麻烦，在kotlin上有改进
+
 + 码点CodePoint，用途是对一些特殊字符方便处理
 + 是UTF-16的，而不是UTF-8的
 + 需注意split、replace等函数的参数，可能要多传-1才行
 + 其他API：charAt,compareTo,equals,startswith,indexOf,lastindexof,replace,substring,tolowerCase,trim(删除头尾空格)(python中有strip)
-split(re)方法传入“”将不能去掉连续空格，而python中的split()不传参可去掉连续空格
+  split(re)方法传入“”将不能去掉连续空格，而python中的split()不传参可去掉连续空格
 
 ## 输入输出
+
 ```
 (1)读取输入
 Scanner in = new Scanner(System.in)  //（可以获取标准输入或者shell重定向）import java.util.Scanner
@@ -174,6 +215,7 @@ PrintWriter out = new PrintWriter("myfile.txt","UTF-8") ;
 ```
 
 ## 控制流程
+
 ```
 //没有goto，但是可以用break或者continue可以跳到指定label:{}
 (1)块作用域
@@ -205,8 +247,10 @@ return 直接返回
 ```
 
 ## 其他类型
+
 + 大数值: BigInteger,BigDecimal //import java.math，有add、multiply函数
 + 数组 （[]与Array）
+
 ```
 (1)int [] a = new int [100] 
 //索引0-index，用[]访问 (堆上创建、栈上引用)
@@ -241,18 +285,22 @@ int [][] odds = new int [NMAX][];
 for (int n=0; n小于 NMAX;n++) odds [n] = new int[n+1];
 ```
 
-
 ## OOP 面向对象
+
 Object Oriented Programming
+
 ### OOP三个特点
+
 + 封装：用private，暴露setter、getter等公开方法
 + 继承：可以使用父类的好东西
 + 多态：在不同子类可以有不同实现。比如用父类指针来引用子类对象
+
 > 只要对象能满足要求，就不关心其功能的具体实现。
 
 > 将数据放在第一位，操作第二位
 
 ### 什么是类/对象
+
 + 实例化(instance)：类构造(construct)对象的过程
 + 封装/数据隐藏(encapsulation)：将数据（对象的实例域 instance field）与方法（method）组合在某个包中，关键是不让类中方法直接访问其他类的数据。
 + 继承（inheritance）:通过扩展一个类来建立另一个类。原始类是Obeject
@@ -262,3 +310,112 @@ Object Oriented Programming
 + 设计类：先设计类，再添加方法
 + 类间关系：依赖(uses-a),聚合(has-a),继承(is-a)
 + UML图（Unified Modeling Language，统一建模语言）
+
+### 标准库中的类
+
++ 使用构造器(constructor)来构造新的实例，new Date().
+  //在Java中，任何对象变量的值是对存储在另外一个地方的一个对象的引用（堆上创建，栈上引用）
+  //所有对象在堆中
+  //将一个方法用于null会运行时错误
++ 2.Local Date类
+  UTC纪元：1970年1月1号 00:00:00
+  Date：表时间点
+  LocalDate：日历表示
+  用静态方法构造(factory method)实例
+  LocalDate.of(1999,12,31) //有getYear,getDay等方法
++ 3.更改器(setter,mutator method)方法修改实例域状态，访问器(getter, access method)获取值
+
+### 用户自定义的类
+
+```
+//完整的程序若干类，一个类中有main
+1.多个源文件使用
+javac Employee*.java  //编译多个
+或 javac EmployeeTest.java //只须主入口，相当于自动make
+2.private使实例域/方法仅被自身使用
+3.构造器
+(1)与类同名
+(2)可以多个构造器，参数不同
+(3)没返回值
+(4)总是伴随new操作调用
+(5)不要在构造器中定义与实例域重名的局部变量
+(6)一般是public，也有不是的
+4.隐藏参数（对象指针this）
+(1)总是有隐式参数this指向对象本身//相当于python中的self
+(2)static方法没有this，因为对象还不存在(pyspark中的sc要求@staticmethod)
+(3)所有方法必须在类内部定义，但是未必内联，因JVM决定
+5.封装的优点
+(1)改变类的内部实现，除了该类的方法外，不影响其他代码
+（比如返回值类型可以固定，不像python随意）
+(2)必须通过更改器修改，可执行类型检查
+//若需要返回一个可变数据域的拷贝，应该进行clone
+6.访问权限
+私有方法（一般是辅助方法helper）不对外暴露，不应成为公共接口，也减少IDE的提示呀
+7.Final 实例域
+一次初始化。防止被人修改。//然而其他语言编写的Native Method是可以突破final的
+
+```
+
+### 静态static(共用)
+```
+1.静态域(也类域)
+类拥有，而每个对象有一个引用拷贝(共享)，不属于任何对象。比如Dog类，白狗、黑狗，用一个static int n_dog来维护狗群大小。
+2.静态常量（不用private，本身大家共用）
+public static final double PI = 3.14;
+3.静态方法
+(1)第一次加载(ClassLoader)时初始化
+(2)所有参数显式(没有this)，因为还没有实例化，不能向对象操作
+(3)不能访问非静态方法，因为非静态方法有this参数，属于对象拥有
+4.工厂方法(factory method)来生成新对象
+LocalDate.now,LocalDate.of
+原因：无法命名构造器；或者当使用构造器时，无法改变所构造的对象类型
+5.main方法，也是静态方法。但是可以操作String
+```
+
+### 方法参数
+```
+1.值调用：方法接收的是调用者提供的值
+2.引用调用：方法接收的是调查者提供的变量地址
+3.Java是值调用(对象引用的时候是拷贝了一个引用，操作后删除拷贝)
+> C++两种调用都有
+> 事实上写代码测试一下能运行就行，不用想这么复杂
+```
+
+### 对象构造方法
+```
+1.重载（overload）：同名方法，返回值类型相同，参数不同
+//返回类型不是方法签名(signature)一部分，必须相同
+//像python不能保证防返回值类型，没有重载，但是有默认参数（靠后）
+//重载不止适用于构造器(Constructor)
+2.默认参数：Java不支持默认参数，但是可以通过重载来实现该功能
+3.无参构造器：使用默认提供的构造器是危险的，其行为不确定
+4.用this()可以调用另一个构造器，节省书写
+5.初始化块：
+类中有一块{},每一次被初始化会执行，不常见不必需
+6.对象析构：Java不支持析构器，有finalize方法，但不知何时被调用。有关闭钩Runtime.addShutdownHook.
+```
+
+### 包 Package
+> 类似using namespace，一般域名逆序，文件夹组织
+```
+1.类的导入
+(1)一个类可以使用所属包中的所有类，及其他包中的共有类
+(2)直接包全名访问，或import语句
+(3)import java.util.* 没负面影响（和python不一样），但是不大明确，而且可以命名冲突
+2.静态导入
+import static java.lang.System，可以直接使用静态方法和静态域了。
+3.将类放入包中
+(1)将包名放在源文件开头
+package com.hostmann.corejava ; //禁止用户用java.开头的包名
+//没有这行的话是一个default package
+```
+
+### 类路径 CLASS_PATH
++ JAR包用ZIP格式组织
++ classpath不允许通配符*以防止shell命令进一步扩展
++ 采用参数 -classpath,-cp来运行
+> 不建议用CLASSPATH固定的环境变量或防止jre/lib/ext下。
+
+> 理解为环境变量env，或者PYTHON_PATH
+
+
