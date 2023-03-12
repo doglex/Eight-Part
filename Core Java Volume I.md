@@ -650,3 +650,43 @@ double s = (Double) m2.invoke(harry);
 + 在覆盖方法时，不要改变预期的行为
 + 使用多态，而非类型信息
 + 不要过多的使用反射（反射是脆弱的，且是耗时的）
+
+## 接口 Interface 
+1.接口不是类，而是对类的一组**需求描述**。这些类要遵从接口描述的统一格式进行定义。是需求的承诺
+
+2.如果类遵从某个接口，那么就履行这项服务。
+```
+Arrays.sort排序前提是所属的类必须实现Comparable接口
+public interface Comparable {int compareTo(Object other);}
+//任何实现Comparable接口的类都需要保证compareTo方法
+```
+
+
+3.接口中所有方法自动是public，实现的时候必须为public
+
+4.接口中可以定义常量(public static final)。不能有实例域或具体方法。
+
+5.将类实现一个接口:
+声明class E implements Comparable
+实现接口的所有方法。（不然实例化后不好调用）。实现时必须为public，不然默认是包可见，可能出错。
+
+6.接口不能实例化，但可以指向实现了该接口的类对象。类似父类指针
+```
+Map <String,Integer> map = new HashMap <>();
+```
+
+7.instanceof 可以检查对象算法是否实现了该接口
+
+8.接口可以扩展 public interface Powered extends Moveable{;}
+
+9.每个类只能一个超类(java不支持多重继承)，但可以多个接口。使行为灵活，逗号隔开。
+
+## 接口与抽象类(abstract class)
++ 有个问题，每个类只能扩展于一个类。
++ 接口可以提供多重继承的大多数好处，同时避免多重继承的复杂性和低效性。
++ 静态方法:Java9以后可以让接口有静态方法。但一般的做法是放在伴随类中。比如Path/Paths,Collection/Collections
++ 默认方法，default修饰
++ 可以设空，节省一部分实现
++ 利于"接口演化"，兼容老版本
++ 解决默认方法冲突:超类优先, 若接口冲突，必须覆盖这个方法。class Student implements Person,Named {public String getName(){return Person.super.getName();}}
+> 千万不要让一个默认方法重新定义Object类中的方法。
