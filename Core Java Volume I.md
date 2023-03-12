@@ -507,3 +507,30 @@ public B(a,b) {super(a);this.b=b;}
 
 > 慎用protected属性。因为对这个类的实现修改，就必须通知所有使用这个类的程序员。违背了OOP数据封装性。
 
+### Object类，所有类的超类
+```
+1.在Java中，只有基本类型不是对象，其他都是。
+2.equals方法
+(1)getClass()返回一个对象所属的类，不相同的不能进行比较。
+(2)equals方法应该具有的特性
+- 自反性：x.equals(x)返回true
+- 对称性: x.equals(y) 则 y.equals(x)
+- 传递性：x.equals(y)，y.equals(x) 则x.equals(z)
+- 一致性：反复调用结果应该相同
+- 对于任意非空引用x，x.equals(null)应该是false
+
+(3).备注
+- 若子类能够拥有自己的相等概念，则对称性需求将强制采用getClass检测
+- 若由超类决定相等的概念，那么就可以用instanceof进行检测，这样可以在不同子类对象之间进行相等的比较
+- 对于数组类型的域，可以使用静态的Arrays.equals方法检测数组元素是否相等
+
+3.hashCode方法
+(1)散列码是由对象导出的一个整型值，默认的散列码是对象的存储地址
+(2)Equal是与hashCode定义一致
+4.toString方法
+(1)getClass().getName()获得类名的字符串
+(2)只要用+号与String相连，就会调用toString方法
+> python中有__str__()可读性好，__repr__()执行好
+(3)print会自动调用toSring
+(4)数组打印会得到一堆字符乱码，应该改用Arrays.toString(luckynums)
+```
