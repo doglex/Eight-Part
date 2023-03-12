@@ -750,3 +750,73 @@ public class TalkingClock {public class Timeprinter implements ActionListener{};
 
 6.静态内部类
 有时候，使用内部类只是为了把一个类隐藏在另一个类内部，并不需要内部类引用外部类对象。可以声明为static。
+
+### 异常、断言和日志（三种错误处理）
+1.出错时：
++ 向用户通告错误
++ 返回到一种安全状态，并能够让用户执行一些其他命令，或者
++ 允许用户保存所有操作的结果，并以妥善的方式终止程序
+
+2.异常处理的任务就是将控制权从错误产生的地方转移到能够处理这种情况的错误处理器
+- 用户输入错误
+- 设备错误
+- 物理限制
+- 代码错误
+
+3.异常分类(派生于Throwable)
++ Throwable:Error（系统内部错误资源耗尽，无能为力）,Exception（RuntimeException，其他异常）
++ Error(错误的类型访问，数组访问越界，访问null指针)
++ Exception(试图在文件尾部后面读取数据，试图打开一个不存在的文件，试图根据给定的字符串查找Class对象)
+> 如果是RuntimeException，一定是你的问题。
+
+4.声明受查异常
+public Image loadImage (String s) throws FileNotFoundException, EOFException
+
+5.如何抛出异常
++ 找到一个合适的异常类
++ 创建这个类的一个对象
++ 将对象抛出 
+
+String readData (Scanner in) throws EOFException{;throw new EOFException();}
+
+6.创建异常类
+从Exception类中派生或者从其子类派生
+
+7.捕获异常
+```
+捕获异常
+(1)若不捕获，程序终止，在控制台打印异常类型和堆栈内容
+(2)try跳过其他代码，执行catch中的处理器代码
+(3)捕获多个异常，用多个catch
+(4)finally{in.close();} //确保文件关闭
+(5)try-catch要多做解耦，不要全部扔一堆，宁愿多写几个try-catch
+(6)finally有return时，try中的return会被finally的return覆盖，因finally一定执行
+(7)finally对in.close仍然可能IOException，重新报错
+(8)带资源的try解决上述问题，自动close
+try (Resource res = ...) {;} //python中有with环境
+(9)堆栈迹元素
+t.printStackTrace();
+t.getStackTrace();
+```
+
+8.使用异常的技巧
++ 异常处理不能代替简单的测试（也很费性能）：只在异常情况下使用异常机制。（应尽量写出无异常的代码）
++ 不要过分细化异常
++ 利用异常的层次结构
++ 不要压制异常
++ 在检测错误时，"苛刻"要比放任好。（早抛出）
++ 不要羞于传递异常。（晚捕获）
+> 让异常冒泡是耗时的，golang是另一套哲学，golang里需要立刻处理err，或者出错后立马在defer中recovery
+
+9.断言以抛出异常
+```
+1.assert条件
+2.assert条件：表达式
+3.启用和关闭断言：对类加载器而言：默认为禁用
+java -enableassertions MyApp
+java -da MyApp
+java -ea:MyClass -ea:com.my...MyApp
+4.什么时候使用断言（完成参数检查，为文档假设使用断言）
+(1)致命的，不可恢复错误
+(2)只用于开发测试阶段
+```
