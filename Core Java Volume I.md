@@ -880,3 +880,43 @@ Pair < ? >
 + 向参数可变的方法传递一个泛型类型的实例。消除警告用@SafeVarargs
 + 注意擦除后的冲突。如boolean equals (String) 和 boolean equals(Object)，因为String不是基本类型，会被擦成Object
 
+## 集合/容器
+> 标准库提供一些方便的数据类型。一般采用数组、链表实现。
+
+1.有哪些
+- ArrayList （变长，索引，数组）
+- LinkedList (双向链表，删除插入快)
+- ArrayQueue （循环数组双端队列）
+- HashSet     无序集（无重复元素）
+- TreeSet     有序集
+- EnumSet     枚举集
+- LinkedHashSet 有序的
+- **Priority Queue  优先队列（最小堆）**
+> Leetcode排序相关题用这个即可
+- HashMap 无序Key-Value,hash,拉链法。O(1)，数组+链表。扩容因子0.75
+> HashMap是非线程安全的，Hashtable是线程安全的。HashTable已经不支持了，改成concurrentHashMap，可以分段锁(hashEntry)支持线程安全。
+- TreeMap 有序Key-Value，红黑树
+- EnumMap 枚举映射
+- LinkedHashMap  有序的
+- WeakHashMap 有利用垃圾回收的
+- IdentityHashMap  用 == 而不是equals比较键值（即使内容相同也被视为不同）
+
+2.常用api
+contains(python中有in)，size，isEmpty，containsAll，equals，addAll，remove，removeAll，clear，retainAll，toArray，
+
+3.迭代方式
+```
+(1)while (iter.hasNext()) {iter.next();}
+(2)for (String e: c) {;}
+(3)iter.forEachRemaning (lambda)
+```
+
+4.注意事项
++ 边遍历边修改是危险的。一般从后向前按索引删除是安全的。
++ 从前向后插入不会更改已有下标值
++ 链表的唯一优点是插入删除效率，若只有少数几个元素，用ArrayList。
+
+4.排序
++ Collections.sort(staff)
++ 使用归并（稳定）可高效排序，Java不这么做，它先转数组，排好(三路快排，不同版本不一样)后再转回来。
+
