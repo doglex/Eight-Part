@@ -567,3 +567,77 @@ printf(String fmt, Object ... args),用省略号表示任意数量
 可以用foreach来解析
 public static void main(String ... args)
 > 在js中是可以是解包或扩展；python中是代替多个切片冒号
+
+## 枚举类
++ 所有枚举类都是Enum的子类
++ toString的逆方法是静态方法valueOf
+
+
+## 反射 Reflection (java.lang.reflect)
+> 运行中反射是性能差的，慎用
+
+1.编写能够动态操纵Java代码的程序
+- 在运行时分析类的能力
+- 在运行时查看对象，比如编写一个toString方法供所有类使用
+- 实现通用的数组操作代码
+- 利用Method对象，这个对象很像C++中的函数指针。
+
+2.Class类
+```
+(1)所有对象有一个运行时的类型标识，Class类保存了这些信息
+(2)获得Class对象的方法
+方法一：getClass()可以返回对象的Class对象。
+Class c1 = e.getClass()
+方法二：Class.forName()可以传入字符串格式的包名来构造Class对象
+//可以用于手工加载类，给用户启动快的幻觉。
+//只能传入类名或者接口名，否则Checked Exception,故应该进行异常处理
+方法三：用.class，比如Random.class 
+//不是对象也可以，比如int.class
+//JVM为每个类型管理一个对象，可以用==判断。比如 e.getClass() == Employee.class
+(3)使用
+- 获得类名：e.getClass().getName()
+- 动态生成实例： Object m = Class.forName("java.util.Random").newInstance() //若需要带参实例化，则要用Constructor类中的newInstance方法
+``` 
+
+3.异常处理
+- 未检查异常：比如null引用
+- 已检查异常：编译器检查是否提供了处理器（handler）
+
+> 应该精心编写代码来避免错误的发生，而不要花精力在异常处理器上
+
+> 并不是所有错误都是可以避免的，编译器要求提供处理器.
+try{;}catch(Exception e){e.printStackTrace();} //Throwable是Exception的超类
+
+> 一旦错误冒泡。代码性能下降
+
+4.利用反射分析类的能力
+```
+java.lang.reflect 中有Field（域），Method（方法），Constructor（构造器）三个类
+这些类有getName(),Field有getType。Method有报告返回类型的方法，getModefiers返回一个整数值，用不同的位开关描述public和static。Class类有getFields（返回一个数组），getMethods,getConstrators(包括超类公有成员)
+还有getDeclareFields...,不包括超类成员
+使用Modifier.toString(c1.getModifiers());
+```
+
+5.在运行时使用反射分析对象
+```
+Class c1 = harry.getClass();
+Field f = c1.getDeclaredField("name");
+f.setAccessible(true); //获取权限
+Object v = f.get(harry); //也有getDouble，也有f.set(obj,value)
+也可以用来编写通用的打印方法 sout.println(new ObjectAnalyzer().toString(squares));
+```
+
+6.反射编写泛型数组
+Object newArray = Array.newInstance(componentType, newLength);
+
+7.调用任意方法（函数指针）
+- 存在多个同名方法，需要指定参数
+```
+Method m1 = Employee.class.getMethod("getName");
+Method m2 = Employee.class.getMethod("raiseSalary",double.class)
+String n = (String) m1.invoke(harry);
+double s = (Double) m2.invoke(harry);
+
+```
+- invoke的参数和返回类型都是Object
+- 方法指针比接口和lambda都慢，建议仅在必要的时候使用Method对象
