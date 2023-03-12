@@ -419,3 +419,31 @@ package com.hostmann.corejava ; //禁止用户用java.开头的包名
 > 理解为环境变量env，或者PYTHON_PATH
 
 
+### 文档注释
+```
+1.插入/\*\*....\*/，可嵌入html代码
+2.类注释
+3.方法注释  @param　@return @throws
+4.静态常量须注释
+5.通用注释 @version @author @deprecated  @see
+6.包注释： 提供package.html 或 package-info.java
+7.注释抽取，用javadoc工具
+```
+> 注释的同时方便形成文档
+
+### 十、类实践技巧
++ 保证数据私有
++ 一定要对数据初始化
++ 不要在类中使用过多基本类型。数量过多，使用另一个类。
++ 不是所有域都需要访问器和更改器。
++ 责任过多的类进行分解（解耦，高内聚、低耦合）
++ 类名和方法名要体现他们的职责
++ DRY：不要老是重新造轮子
+> 一个类一个职责
+
+> 一个职责不要分解到搞多个类，那样可能Over Design
+
+## 继承 Inheritance
++ 继承（Inheritance）于已存在的类创建一个新类。
++ 反射（Reflection序运行期间发现更多的类及其属性的能力。
+> python有type、inspect等反射功能
