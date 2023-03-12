@@ -117,7 +117,7 @@ where s.symbol = ‘AAPL’;
 + 如果数据是分桶的，则大表也可以优化。简单的说，必须按on键分桶，且一张表的桶数是另一张表的若干倍。
 set hive.optimize.bucketmapJOIN =true;
 + hive对于右外连接和全外连接不支持这个优化。
-> map-side join 就是把小表形成哈希表，在map时就查哈希表联好，甚至计算好；reduce side join，就是都要在reducer里进行关联；map-side join 性能更好。
+> map-side join 就是把小表形成哈希表，在map时就查哈希表联好，甚至计算好；reduce side join，就是都要在reducer里进行关联；map-side join 性能更好，减少大量网络IO。
 
 
 ## 排序
@@ -285,8 +285,8 @@ hive.exec.reducers.max=1009;
 et mapreduce.job.reduces = 15;
 ```
 
-16.map输入前合并小文件
-
+16. map输入前合并小文件
+17. 若能写成MapOnly的任务可以大幅加速
 
 ## Hive Streaming
 + 建议使用通用的TRANSFORM
@@ -381,3 +381,98 @@ SELECT TRANSFORM (wc.word, wc.count) USING ‘${env:HOME}/reducer.py’
 AS word,count; )
 ```
 
+## 函数式编程的好处
++ **无副作用**，不会引入额外的改变，当你传入x1就是对x1处理，传入x2就是对x2处理，相同的x1传入保证了**一致性**结果。天然的『**面向数据编程**』。为什么说是面向数据，因为spark中的操作都是针对rdd对象开展。
++ 正因为无副作用，很适合作为数据处理的**管道（Pipeline）**。
++ 管道是不变的，以不变的管道应万变的数据，**天然支持了多线程**。而pyspark正是这么做的。至于Tensorflow之类是**符号编程**，那就是符号（比如placeholder，layer）加管道。
++ **函数**本身是**变量（Object）**，自己本身容易被传递、修改和柯里化（携带一定context），容易做成闭包或者装饰器。
++ 对于java来说，**函数式接口**简化了接口的使用，接口中只有一个函数时只需要实现这个函数即可。
++ python很适合作为**函数式数据操纵语言**，因为语言标准里就支持了这些特性，而且同时可以作为多个系统的**胶水**。
+
+## MapReduce框架
++ 给出了什么可以做，什么不可以做的界限。相对过去的其他模型的可选项少。复杂的一面是，在框架的约束下，找到解决问题的方案非常有难度。
++ 作业被分成一系列运行在分布式集群中的**map**和**reduce**任务。map任务负责数据载入、解析、转换、过滤，一个reduce负责处理map任务的输出结果的一个子集。
++ 两个过程，八个阶段：map任务(record reader,mapper,combiner,partitioner),reduce任务(shuffle混排、sort、reducer、output format)。
+```
+record reader 将输入的分块(split)解析成记录，即键值对(key-value),通常键是文件中的位置，比如行号（注意split间是无序的，本身存储就是无序的）。
+mapper将kv对重组为新的kv对，为reducer准备。mapper一般是本地的。
+**combiner**（optional）是本地的聚合，相当于局部的reducer。对于满足交换律(AB == BA)和结合律(A,BC == AB,C)的计算可以在局部计算再接着全局计算，发送(emit)的数据将少了，大大降低了网络IO。对于提升性能很重要，无副作用。
+**partitioner** 的作用是将mapper或者combiner输出kv对拆分为分片(shard)，每个reducer对应一个分片。默认是计算key的取模哈希，然后按照reducer的个数分发到reducer，可以确保不同mapper产生的相同的key的数据分发到同一个reducer，不能保证reducer中只有一种key。一般不需要改写partitioner，等待reducer拉取即可。
+shuffle和sort。Map发送到Reducer的数据是不能保证发送顺序和抵达顺序的，靠拉取，使用**context.write**传送数据。排序的目的是把相同key的记录聚集在一起。shuffle过程不可定制。开发人员仅可定制排序分组的Comparator对象。
+reducer将分组好的数据作为输入，执行reduce操作，聚合、过滤、合并等操作。发送处理后的kv对到输出。其中存在(热点)数据倾斜问题，可以控制combiner、partitioner或者修改处理流程解决。
+output format控制record writer将结果写出，HDFS或者其他存储（需要注意线程安全）。
+```
+
+## 最大、最小值
++ ** reducer和combiner是可以使用同一个reduce操作的。因为局部和全局的操作是一致的，是符合交换律结合律。**
+```python
+calc = lambda x,y : y if x is None else (
+min(x[0],y[0]),
+max(x[1],y[1]),
+sum(x[2],y[2]))
+rdd.map(lambda x: (id,(d,d,1)) for id,d in x.ss(),fold_combiner=(None,calc))
+   .foldbykey(init=None,iter_reducer=calc)
+```
+
+## 平均值
++ 本身不能直接支持结合律和交换律。
++ 为了让combiner复用reducer代码，即局部和全局保持一致操作，那么需要增加一列用来计数。
+```python
+calc = lambda a,b: (
+a[0]+b[0],
+(a[0]*a[1]+b[0]*b[1])/(a[0]+b[0]))
+rdd.map(mapper  = lambda x:(id,(1.0,len(d)) for id,d in x.ss(),
+   combiner = calc)
+   .iterreducebykey(calc)
+#注意很多编程语言里的地板除问题，而python的类型是动态的。python2和python3的除法特性还不同，如何要确保这件事，请进行类型转换cast。
+```
+
+## 中位数与标准差
++ 不满足交换律和结合律，但是可以压缩传输。
++ 前提是假设每个数会出现多次，相当于有序的压缩存储，当然也可以不有序，仅仅是压缩目的。
++ 注意**treemap**（红黑树）是有序的，而**hashmap**（拉链法取模哈希桶存储）在人类可读性上是无序的。
++ 原书《MR设计模式》中实现了Itrable_SortedMap_Writable
+```python
+def sort_counter(kvs):
+	d = collections.defaultdict()
+	for k, v in kvs:
+    	if k in d:
+           d[k] += v
+        else:
+           d[k] = v
+rdd.map(lambda x: (id,(k,1)) for id, k in x.ss(),
+        combiner = sort_counter)
+   .groupreducebykey(reducers=(mergetrees,
+                    getmid,
+                    getstd))
+```
+
+## 索引模式
++ 索引值作为key，就是python的 {zip(*enumerate(a))}
++ partitioner可以定制来有效负载均衡
++ 最终结果可以是一堆文件
++ combiner可以与reducer用相同代码
+```python
+index = lambda xs: " ".join(xs)
+rdd.map(lambda x: (link,data) for link, data in x.ss()
+	combiner = index)
+   .groupreducebykey(index)
+```
+
+## 部计数器计数（map-only）
++ 适用于大数据集上的数据汇总，要求计数器数目很小
++ 利用了context.getCounter()
++ 当然要求外部结构线程安全，这要求框架级别的保证
++ 是**map-only**的任务，没有传到reduce的网络IO，效率较高
+```python
+safe_d = {'a':0,'b':0}
+rdd.map(lambda x: safe_d[k].increment(1) for k in x.ss() if k in d)
+```
+> **这种用法在Pandas的groupby-apply或者apply中太经典了，和外部数据交互，本身的返回是None，修改了外部数据。但是要注意多进程的情况**
+
+## 数据倾斜问题
++ 现象：卡在一个reducer上动不了了，看到reduce进度一直在77%之类的
++ 原因：塞到一个reducer中的数据太多了(如两个表join，而join on的列中两边都存在大量空值，MxN个进入了同一个reducer)
++ 解决1：设计好哈希键(用于确定分到哪个reducer中)，如将大key先分散到多个(加前缀后缀等)，后续再合并
++ 解决2：在map时加大内存开启聚合，或者尽量改成map-side join
++ 解决3：直接先去掉空值
