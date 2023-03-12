@@ -820,3 +820,63 @@ java -ea:MyClass -ea:com.my...MyApp
 (1)致命的，不可恢复错误
 (2)只用于开发测试阶段
 ```
+
+## 日志记录
++ 用Log4J 2 
++ 用logback
++ 直接用标准的sout
+
+## 调试工具
+```
+1.打印、IDE断点
+(1)sout.println()
+(2)Logger.getGlobal.info()
+2.每个类中放单独的main
+3.JUnit单元测试
+4.日志代理：截获日志，记录、调用超类方法
+5.利用Throwable的printStackTrace
+6.System.error重定向
+7.-verbose参数观察类加载情况
+8.-xlint告诉编译器检查普遍错误
+9.图形工具监控
+10.jmap工具
+11.-Xprof标志剖析
+```
+
+## 泛型
+泛型之前，是用继承Object实现的。有两个问题，第一，获取一个值时，必须进行强制类型装换；第二，添加时没有类型检查。
+解决：类型参数(type parameters):
+ArrayList <String> files = new ArrayList <String> ();
+
+1.为什么用泛型
++ 可读性和安全性都更好了。
+
+2.示例
+```
+ArrayList <String> files = new ArrayList <String> ();
+public class Pair <T,U> {...}
+public static <T> T getMiddle(T...a);
+public static <T extends Comparable> T min (T [] a)多个限定
+T extends Comparable & Serializable
+
+继承：
+ArrayList <T> 类实现了 List <T> 接口
+一个ArrayList <Manager> 可以转换为List <Manager>
+
+通配符类型进行限定：
+Pair < ? extends Employee >
+Pair < ? >
+```
+
+3.JVM中擦除
++ 虚拟机没有泛型类型对象，所有对象都是普通类
++ 实在没法限定类型就变成了Object
++ 为保持安全性，必要时插入强制类型转换 //注解：@Suppress Warnings("unchecked")来关闭警告
+
+4. 使用限制
++ 不能用基本类型实例化类型参数 
++ 运行时类型查询是原始类型（擦除后的类型）
++ 不能new参数化类型的数组，除非强制转换，不安全。没事，IDE会提示
++ 向参数可变的方法传递一个泛型类型的实例。消除警告用@SafeVarargs
++ 注意擦除后的冲突。如boolean equals (String) 和 boolean equals(Object)，因为String不是基本类型，会被擦成Object
+
