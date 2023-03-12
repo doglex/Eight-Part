@@ -473,6 +473,6 @@ rdd.map(lambda x: safe_d[k].increment(1) for k in x.ss() if k in d)
 ## 数据倾斜问题
 + 现象：卡在一个reducer上动不了了，看到reduce进度一直在77%之类的
 + 原因：塞到一个reducer中的数据太多了(如两个表join，而join on的列中两边都存在大量空值，MxN个进入了同一个reducer)
-+ 解决1：设计好哈希键(用于确定分到哪个reducer中)，如将大key先分散到多个(加前缀后缀等)，后续再合并
++ 解决1：设计好哈希键(用于确定分到哪个reducer中)，如将大key先随机分散到多个(加前缀后缀等)，后续再合并
 + 解决2：在map时加大内存开启聚合，或者尽量改成map-side join
 + 解决3：直接先去掉空值
