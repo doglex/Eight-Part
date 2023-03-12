@@ -242,4 +242,23 @@ for (int n=0; n小于 NMAX;n++) odds [n] = new int[n+1];
 ```
 
 
+## OOP 面向对象
+Object Oriented Programming
+### OOP三个特点
++ 封装：用private，暴露setter、getter等公开方法
++ 继承：可以使用父类的好东西
++ 多态：在不同子类可以有不同实现。比如用父类指针来引用子类对象
+> 只要对象能满足要求，就不关心其功能的具体实现。
 
+> 将数据放在第一位，操作第二位
+
+### 什么是类/对象
++ 实例化(instance)：类构造(construct)对象的过程
++ 封装/数据隐藏(encapsulation)：将数据（对象的实例域 instance field）与方法（method）组合在某个包中，关键是不让类中方法直接访问其他类的数据。
++ 继承（inheritance）:通过扩展一个类来建立另一个类。原始类是Obeject
++ 对象的行为（behavior）：可以对对象施加哪些操作
++ 对象的状态（state）:操作时，对象如何响应
++ 对象的标识(identity):区分相同行为与状态的对象。考虑hashcode方法
++ 设计类：先设计类，再添加方法
++ 类间关系：依赖(uses-a),聚合(has-a),继承(is-a)
++ UML图（Unified Modeling Language，统一建模语言）
