@@ -534,3 +534,36 @@ public B(a,b) {super(a);this.b=b;}
 (3)print会自动调用toSring
 (4)数组打印会得到一堆字符乱码，应该改用Arrays.toString(luckynums)
 ```
+
+
+## 泛型数组列表 ArrayList
++ 添加删除元素时，自动调节数组容量。不够存了，拷到一个更大的数组。
++ 一个采用类型参数(type parameter)的泛型类（generics）
+```
+ArrayList <String> arr = new ArrayList <>(); //还可以传初始大小
+```
++ Vector类（子类有Stack）线程安全，慢；LinkedList使用双向链表（增删快）。
++ 确认不修改了，可以用trimToSize减少内存占用
++ 访问有get，set，foreach，for(),add
++ 比较好的做法是 new ArrayList ; add; toArray();
++ 未确定类型的用ArrayList，虽然有警告，但是只要确定安全，用@Suppress Warning("unchecked")即可
+
+
+## 对象包装器
++ 每个基本类型都有包装器。int 对应 Integer， double 对应 Double
++ 这些包装器是不可变的，一旦构造，不允许修改其中的值
++ final的，不能定义子类
++ 使用equals判断相等
++ 用到的时候自动装箱拆箱
+```
+ArrayList <Integer> list = new ArrayList <>();
+list.add(3); //在编译时自动变成  list.add(Integer.valueOf(3));
+```
++ API: toString, ParseInt, valueOf
+> valueOf方法是得到的Integer包装类，而parseInt得到的是int基本类型.后者效率更高
+
+## 位置参数变长
+printf(String fmt, Object ... args),用省略号表示任意数量
+可以用foreach来解析
+public static void main(String ... args)
+> 在js中是可以是解包或扩展；python中是代替多个切片冒号
