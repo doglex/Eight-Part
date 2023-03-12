@@ -995,7 +995,7 @@ try{critical section;} finally {mylock.unlock();}
 
 3.synchronized 关键字
 
-内部对象锁
+根据内部对象锁实现
 ```
 public synchronized void method() {body;}
 等价于
@@ -1004,6 +1004,13 @@ this.intrisicLock.lock();
 try{body;}
 finally{this.intrisicLock.unlock();}}
 ```
+> 能保证原子性、可见性和有序性
+
+> 原子性是其中代码要么一起执行，要么一起不执行
+
+> 可见性是内存中的变量值的修改，其他线程可以看到
+
+> 有序性指的是谁先获得锁谁先执行，而不是“禁止jvm重排指令”
 
 4.volatile域
 
