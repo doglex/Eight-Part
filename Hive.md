@@ -3,7 +3,7 @@
 ## Hive 
 + Hive表的管理借助元数据库（derby或者mysql）
 + 存储借助HDFS
-+ 查询借助HQL转成MapReduce
++ 查询借助HQL转成MapReduce任务。Map Reduce就是分组聚合，类似groupby-apply 
 + 锁借助Zookeeper
 
 ## 数据类型
@@ -118,4 +118,266 @@ where s.symbol = ‘AAPL’;
 set hive.optimize.bucketmapJOIN =true;
 + hive对于右外连接和全外连接不支持这个优化。
 > map-side join 就是把小表形成哈希表，在map时就查哈希表联好，甚至计算好；reduce side join，就是都要在reducer里进行关联；map-side join 性能更好。
+
+
+## 排序
+1.Order By和 Sort BY
++ 尽量不用order by。ORDER BY 是全局排序，所有数据需要通过一个reducer，当hive.mapred.mode 设置为strict的时候严格要求加LIMIT
++ SORT BY 是局部排序，各个reducer各自排序，不保证全局有序
++ 都可以使用升序asc，降序desc，缺省是asc
+
+2.含有SORT BY的DISTRUBUTE BY
++ DISTRIBUTE BY 可以控制map的输出在reducer中是如何划分的，如果不指定，默认是按哈希值进行均匀划分。可以手工指定键，以保证在这个键上的sort by是有序的。
+```
+select s.ymd,s.symbol,s.price_close 
+from stocks s 
+distribute by s.symbol
+sort by s.symbol ASC, s.ymd asc
+```
++ 可以保证在各个s.symbol上是有序的
++ distribute by 一定要在 sort by 之前
+
+3.CLUSTER BY 是 SORT BY+DISTRUBUTE BY的简写，当两者的键一致时
+```
+select s.ymd,s.symbol,s.price_close
+from stocks s 
+cluster by s.symbol;
+```
+
+>  使用Hive Streming时，可以指定cluster by，从而将需要的主键划到同一个桶中进行计算，而不会分散到不同的桶里 
+
+##  视图
+1.视图是一个逻辑上的表，并不存储数据，只是一个表的象征。
++ 可以先执行视图，来简化子查询。
++ 实际上是制定了一个逻辑流程。
++ 对于查询效率没有实质上的提升。
++ hive没有物化视图。
++ 视图是只读的，只允许修改TABLEPROPETIES的描述信息。
+
+原语句
+```
+from (
+select * from people join cart 
+on (cart.people_id = people.id)
+where firstname = ‘john'
+) a
+select a.lastname where a.id = 3;
+```
+以视图修改
+```
+create view shorter_join as 
+select * from people join cart
+on (cart.people_id = people.id)
+where firstname = ‘john’;
+select lastname from shorter_join where id = 3;
+```
+
+2.通过视图限制访问 create view safe_table as select firstname, lastname from userinfo;
+
+3.通过视图从 map、struct、array中取出一部分数据，从而把数据压平。
+
+4.删除视图 drop view if exists shipments；
+
+> 可以用with语句定义多个步骤
+
+## Hive索引
+```
+1.hive支持的索引有限。
+可以帮助裁剪数据减少mapreduce压力。但对有些查询是没用的。
+需要消耗额外的存储，创建索引本事也消耗计算资源。
+可以用EXPLAIN 语句来查看某个语句是否用了索引。
+2.创建索引
+除了S3外，对外部表和视图都可以建立索引。
+create index employees_index 
+on table employees (country)
+as ‘org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler’  — 也可以是BITMAP类型
+with deferred rebuild 
+IDXPROPERTIES (‘creator’=‘me’.’at’=’some time’)
+in table employee_index_table
+partition by (country, name);
+3.重建索引
+数据改变时索引无法自动触发重新索引。
+alter index employees_index
+on table employees
+partition (country = ‘cn’)
+rebuild;
+4.显示索引
+show formatted index on employees；
+5.删除索引
+表或者分区删除时，相应的索引也会被删除。hive用户不允许在删除表之前删除索引。
+drop index if exists employees_index on table employee；
+```
+
+## 最佳实践
+1. 应尽量避免反模式
++ 按天划分的表 supply_2017_01_06 这样表的数量增长是很快的，是一种反模式。
++ 需要改成一张表的各个分区，用event_day作为分区字段。
+
+2. 分区
++ 分区很有用，减小了全盘扫描。
++ 分区应该是一些文件的合并，每个分区下的文件应该足够大。如果分区数过多，就是文件夹数量过多。而HDFS NameNode需要保存元信息，保存不下了。
+
+3. hive不保证唯一键和标准化，数据可能是重复的，是为了保证TB级和PB级的计算。
+> 没有主键的概念
+
+4. 同一个数据的多次处理，只需要一轮扫描
+``` sql
+低效率
+insert overwrite table sales
+select * from history where action = ‘purchase’;
+insert overwrite table credits 
+select * from history where action = ‘returned’; 
+高效率
+from history 
+insert overwrite sales select * where action = ‘purchase’;
+insert overwrite credits select * wherer action =‘returned’;
+```
+
+5. 设计中间表，按天划分分区，减少很多重复工作。
+
+6. 总是使用压缩。MapReduce任务是偏于IO密集型的，有多余的CPU用来压缩解压缩。但是对于CPU开销大的机器学习就不要用压缩了。
+
+7. 记得用使用EXPLAIN [EXTENDED] 解释执行过程，从而调优
+
+8. JOIN 优化。使用left join，且将小表放前面，可能会调用 map-side join
+
+9. 并行执行。
+```
+set hive.exec.parallel = true;
+```
+
+10.JVM重用
+```
+set mapred.job.reuse.jvm.num.tasks = 10;
+```
+
+11.配置动态分区
+```
+hive.exec.dynamic.partition.mode
+hive.exec.max.dynamic.partitions
+hive.exec.max.dynamic.partitions.pernode
+dfs.datanode.max.xcievers
+```
+
+12. 推测执行:侦测将执行慢的TaskTracker加入黑名单
+```
+mapred.map.tasks.speculative.executor = true ;
+mapred.reduce.tasks.speculative.executor = true ;
+```
+
+13.虚拟列
+```
+set hive.exec.rowoffset = true;
+```
+
+14.开启压缩,减少传输
+```
+set hive.exec.compress.intermediate = true;
+mapred.map.output.compression.codec;
+hive.exec.compress.output
+mapred.output.compression.codec
+```
+
+15.设置reducer数量，也决定输出文件个数，个数也影响到下游任务的task数量
+```
+hive.exec.reducers.bytes.per.reducer=256000000;
+hive.exec.reducers.max=1009;
+et mapreduce.job.reduces = 15;
+```
+
+16.map输入前合并小文件
+
+
+## Hive Streaming
++ 建议使用通用的TRANSFORM
++ Streaming为外部进程开启了一个IO管道，数据传入标准输入，之后从标准输出返回到Streaming API job
++ TRANSFORM用的是UTF-8
+1.简单变换
+```
+select transform(a,b) using ‘/bin/cat’ as newA, newB from default.a; —恒等变换
+select transform(a,b) using ‘/bin/cat’ as (newA INT, newB DOUBLE) from default.a; —改变类型
+select transform(a,b) using ‘/bin/cut -f1’ as newA from a; —投影
+select transform(a,b) using ‘/bin/sed s/4/10/‘ as newA,newB from a; —一部分不输出到标准输出的话，行数是可以更改的
+```
+
+2.分布式缓存
+```
+将文件或者依赖的数据分发到每个节点，让每个节点都能执行这个文件
+add file ${env:HOME}/prog_hive/ctof.sh
+select transform (col1) using ‘ctof.sh’ as convert from a;
+```
+
+3.使用其他程序
+```
+只需要控制好输入输出即可
+每行使用tab进行分隔
+一行产生多行或者减少行只需要控制输出行即可，python的print是自带换行符的
+select transform (col1) using ‘python ctof.py’ as convert from a;
+select transform (col1) using ‘perl ctof.pl’ as convert from a;
+自定义python解释器
+使用add cachearchive的方法把tar.gz添加到分布式缓存，Hive会自动解压压缩包
+解压后的目录名是和压缩包名称一样的：
+./<压缩包名字>/<压缩的相对路径>/bin/python
+add cachearchive ${env:my_workbench}/share/python2.7.tar.gz;
+transform中使用：
+using 'python2.7.tar.gz/bin/python my.py' 
+```
+
+4.将Streaming用于聚合
+
+比如求和
+```
+#!/usr/bin/perl
+my $sum=0;
+while (<STDIN>){
+my $line = $_;
+chomp($line);
+$sum=${sum}+${line};
+}
+print $sum;
+```
+```
+add file ${env:HOME}/aggregate.pl;
+select transform (number)
+using ‘perl aggregate.pl’ as total from sum;
+```
+
+5.利用CLUSTER BY进行wordcount
++ CLUSTER BY 可以保证同一个key在同一个reducer中，且数据有序，但是一个cluster可能有多个key
++ 相当于集成了distribute by 和 sort by
++ 注意UDF分发到各个机器上，不好利用全局字典
+```
+import sys
+for line in sys.stdin:
+    words = line.strip().split()
+    for word in words:
+        print “%s\t1”%(word.lower())
+
+import sys
+last_key, last_count = None,0 
+for line in sys.stdin:
+    key, count = line.strip().split(“\t”)
+    if last_key and last_key ！= key:
+        print “%s\t%t%d” (last_key,last_count)
+    else:
+        last_key = key
+        last_count += int(count)
+if last_key:
+    print “%s\t%t%d” (last_key,last_count)
+```
+```
+
+CREATE TABLE docs (line STRING);
+CREATE TABLE word_count (word STRING, count INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘\t’;
+
+FROM (
+FROM docs
+SELECT TRANSFORM (line) USING ‘${env:HOME}/mapper.py’
+AS word, count 
+CLUSTER BY word ) wc
+INSERT OVERWRITE TABLE word_count
+SELECT TRANSFORM (wc.word, wc.count) USING ‘${env:HOME}/reducer.py’
+AS word,count; )
+```
 
