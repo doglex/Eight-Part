@@ -920,3 +920,93 @@ contains(python中有in)，size，isEmpty，containsAll，equals，addAll，remo
 + Collections.sort(staff)
 + 使用归并（稳定）可高效排序，Java不这么做，它先转数组，排好(三路快排，不同版本不一样)后再转回来。
 
+## 并发/异步
++ 每个进程拥有自己的一整套变量（PCB程序，数据），而线程共享数据。堆是共享的，栈是独立的
++ 线程间通信比进程间更有效、容易。
+
+### 怎么开多线程
+```
+1.方案一
+(1)实现Runable接口 
+public interface Runable {void run();}
+// 因为是函数式接口（仅一个函数），可以用lambda
+Runable r = ()->{task;}
+(2)新建一个线程
+Tread t = new Thread(r);
+(3)启动线程
+t.start(); //不要直接调用run，而用start
+2.方案二（不推荐）
+(1)派生Thread
+class MyThread extends Thread {public void run() {task;}}
+(2)实例化，start
+3.方案三：线程池（若有很多任务）
+```
+
+### 怎么终止线程
+```
+1.return或者没有捕获异常时，线程终止。（以前有stop，现在没了）
+2.没有可以强制终止线程的方法。而interrupt方法可以用来请求终止线程（对中断状态boolean置位）
+while (!Thread.currentThread).isInterrupted() && more) {do more work;}
+- 但是，若线程被阻塞，就无法检测中断状态，产生Interrupted Exception
+- 被中断的线程可决定如何响应中断：某些线程会先处理完异常，先不理会中断 try-catch
+- 不要直接忽视 Interrupted Exception 至少要设置一下中断状态或者抛出
+```
+
+### 六种线程状态 
+```
+1.NEW（新创建）
+2.Runable（可运行，start）（可能正在运行也可能没运行，取决于OS）
+> PC、服务器一般是按优先级抢占式调度；手机，协作式调度
+3.Blocked（被阻塞）（为了内部对象锁被其他线程拥有）
+4.Waiting（等待）（等待调度器的条件）
+5.TimedWaiting（计时等待）（超时参数）
+6.Terminated（被终止，正常return或者异常时被终止）
+```
+
+### 线程属性
+```
+1.线程优先级
+(1)setPriority方法//有MIN_PRIORITY值为0，MAX_PRIORITY值为10，默认是NORM_PRIORITY值为5
+当线程调度器有机会选择新进程时，首先选高优先级（低优先级的线程可能永远得不到执行）
+(2)高度依赖操作系统。不要将程序构建的功能的正确性依赖于优先级。
+- 映射的Windows的7个优先级
+- 而Oracle为Linux提供的JVM没有优先级
+2.守护进程（deamon thread）
+t.setDaemon(true);
+- 守护线程的唯一用途是为其他线程提供服务（持续运行，只剩下守护线程时就没必要继续运行程序了）
+- 守护线程应该永远不去访问固有资源，如文件、数据库，因为它会在任何时候中断
+3.未捕获的异常处理器
+run方法不能抛出异常，直接线程死了。可以用setUncaughtExceptionHandler为任何线程安装一个处理器，默认处理器为空。
+ThreadGroup（线程组）可以实现ThreadUncaughtException接口，优先用父线程组的UncaughtException方法。
+```
+
+### 线程同步阻塞(线程安全问题)
+1.竞争条件（race condition）
+不是原子操作，这个线程做了一半操作（加载到寄存器，增加，未写出），另一个线程抢了控制权（加载到寄存器...），导致线程不安全。
+
+2.锁对象
++ synchronized 关键词表同步
++ 使用ReetrantLock
+```
+Lock mylock = new ReetrantLock();
+mylock.lock()
+try{critical section;} finally {mylock.unlock();}
+```
+
+3.synchronized 关键字
+
+内部对象锁
+```
+public synchronized void method() {body;}
+等价于
+public void method(){
+this.intrisicLock.lock();
+try{body;}
+finally{this.intrisicLock.unlock();}}
+```
+
+4.volatile域
+
+用volatile标记的变量修改时，会将其他缓存中存储变量清除，然后重新读取(刷新)。是一种免锁机制。
+- volatile本质是告诉JVM当前变量不确定（重新读取不锁定），synchronized则是锁定变量，其他线程被阻塞
+- volatile仅保证变量修改可见性，synchronized保证可见性原子性
