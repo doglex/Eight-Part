@@ -1015,5 +1015,5 @@ finally{this.intrisicLock.unlock();}}
 5.理解
 + synchronized是万能(可见性+原子性)的，但是有锁进行了强制同步，造成了性能损失
 + volatile仅提供可见性，比synchronized更轻量级，不会阻塞线程
-+ 若用了synchronized后有指令重排问题，应该对变量加volatile
++ 若用了synchronized后有指令重排问题，应该继续对变量加volatile
 + volatile只能加在变量上的，而synchronized可以加在变量或方法上
