@@ -682,7 +682,8 @@ Map <String,Integer> map = new HashMap <>();
 9.每个类只能一个超类(java不支持多重继承)，但可以多个接口。使行为灵活，逗号隔开。
 
 ## 接口与抽象类(abstract class)
-+ 有个问题，每个类只能扩展于一个类。
+> 最大区别： 抽象类只能单继承，而接口可以多实现
++ 抽象类有个问题，每个类只能扩展于一个类。
 + 接口可以提供多重继承的大多数好处，同时避免多重继承的复杂性和低效性。
 + 静态方法:Java9以后可以让接口有静态方法。但一般的做法是放在伴随类中。比如Path/Paths,Collection/Collections
 + 默认方法，default修饰
@@ -690,3 +691,62 @@ Map <String,Integer> map = new HashMap <>();
 + 利于"接口演化"，兼容老版本
 + 解决默认方法冲突:超类优先, 若接口冲突，必须覆盖这个方法。class Student implements Person,Named {public String getName(){return Person.super.getName();}}
 > 千万不要让一个默认方法重新定义Object类中的方法。
+
+## 接口示例
+1.接口与回调(Call Back)
+//回调模式：在某个特定事件发生时应采取的动作
+```
+public interface ActionListener ;
+class TimePrinter implements ActionListener;
+ActionListener listener = new TimePrinter();
+Timer t = new Timer(1000,listener);
+```
+
+2.Comparator接口
+```
+public interface Comparator <T> {int compare (T first, T second);}
+class LengthComparator implements Comparator <String> {;}
+Comparator <String> comp = new LengthComparator();
+if (comp.compare(words[i],words[j])>0)...
+```
+
+3.对象克隆：Cloneable接口
+若原对象和浅克隆对象共享的子对象是不可变的，那么共享是安全的。不过通常是可变的，因此需要clone。
+
+
+## Lambda表达式：使用简洁的语法定义代码块
+> 还是没有其他语言简洁，用起来也有限制，或者可以考虑kotlin
+```java
+(String a, String b) -> a.length()-b.length();
+(String a, String b) -> {if (a.length() 小于 b.length()) return -1; else return 0;} //java支持多行，python只能一行
+() -> {sout(0);} //无参要写括号
+```
+
+## 内部类
+> 总之，没有太大必要使用内部类
+
+public class TalkingClock {public class Timeprinter implements ActionListener{};}
+
+1.使用原因：
+(1)内部类方法可以访问该类定义所在的作用域的数据，包括私有数据
+(2)内部类对包内其他类隐藏
+(3)想要定义一个回调函数且不想编写大量代码时，使用匿名内部类比较便捷
+
+2.使用内部类访问对象状态
+内部类总有一个引用，指向创建它的外部类对象(outer或者OuterClass.this)
+内部类的静态域必须是final的，我们希望一个静态域只有一个实例。内部类不能static。
+
+3.内部类是否有用、必要和安全
+(1)没必要
+(2)内部类是一种编译器现象，与虚拟机无关，编译器会把内部类翻译成$
+(3)有风险：若内部类访问了私有域，就有可能通过附加在外部类所在包中的其他类访问他们。
+
+4.局部内部类
+封在函数里，不能为public或private，对外部世界完全隐藏。//只能用final变量
+
+5.匿名内部类
+只创一个对象 new InterfaceType() {data and methods}
+双括号初始化：invite(new ArrayList <String> () {{add("1");add("2");}});
+
+6.静态内部类
+有时候，使用内部类只是为了把一个类隐藏在另一个类内部，并不需要内部类引用外部类对象。可以声明为static。
