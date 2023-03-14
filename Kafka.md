@@ -1,4 +1,10 @@
 参考 https://zhuanlan.zhihu.com/p/388206784
+## Kafka使用注意事项
++ 配好特定的一个(或多个)topic
++ 一个唯一的group_id就是一套完整的数据
++ 用earliest就是从头(未被删的)消费，用latest就是从当前末尾开始消费，或者自己定义每个partition从多少offset开始消费
++ Flink的source并行度可以设置为partition能整除的因子，比较均衡且没有悬空的线程
+
 ## 为什么需要 Kafka 中间件
 + Kafka是一个消息队列(MQ, Message Queue)
 + MQ的作用在于**解耦上下游业务**。即，上游只用管数据生产，而不必受制于下游的处理压力；下游只用管数据消费，只是订阅轮询topic，而不用依赖数据是怎么生产出来的；一次生产，可以多次消费(使用不同的group_id)
