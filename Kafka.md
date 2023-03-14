@@ -25,3 +25,10 @@
 + zookeeper：负责leader、follower投票
 + AR==Replica, ISR就是紧跟Leader副本的副本，OSR就是落后Leader很多的副本。Leader会维护哪些是ISR、哪些是OSR，OSR是可能追上ISR的。选Leader的时候优先从ISR里选。
 
+## 生产者发送消息模式
++ 发后即忘：发了就不管了，不管Kafka有没有收到
++ 同步：发了一条，等待成功写入的消息，之后再发下一条 
++ 异步：发了一条，就继续发或者干别的，不会阻塞，是否成功可以回头查看日志
+
+
+
