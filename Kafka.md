@@ -1,7 +1,7 @@
 参考 https://zhuanlan.zhihu.com/p/388206784
 ## Kafka使用注意事项
 + 配好特定的一个(或多个)topic
-+ 一个唯一的group_id就是一套完整的数据
++ 一个唯一的group_id就是一套完整的数据，拉取的方式
 + 用earliest就是从头(未被删的)消费，用latest就是从当前末尾开始消费，或者自己定义每个partition从多少offset开始消费
 + Flink的source并行度可以设置为partition能整除的因子，比较均衡且没有悬空的线程
 
@@ -55,3 +55,5 @@
 ## 可靠性怎么保证
 + acks：该参数决定需要几个副本写入才能表示成功写入
 + 消息发送：“同步”方式可以保证，“异步”方式如果发现错误需要重传
++ 手动提交offset: 比如Flink消费时的checkpoint时会提交一次offset，从而之后可以从这个offset开始消费
+
