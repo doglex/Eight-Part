@@ -1,8 +1,3 @@
-## 思考?
-+ 不同语言设计模式不同，其实现代码也不同。或者不是OOP的语言
-+ 可以期望特定语言在语法层面就隐式的解决，不用显式的编写设计模式
-+ 设计模式是较流行的实践
-
 ## 设计模式列表
 > 参考 https://github.com/youlookwhat/DesignPattern
 + **创建型模式**：单例模式、抽象工厂模式、建造者模式、工厂模式、原型模式
@@ -22,7 +17,7 @@ public class Singleton {
 }
 ```
 + 懒汉式(线程不安全，不可用)：按需创建，不安全原因是可能两个线程同时创建
-```
+``` java
 public class Singleton {
 	private static Singleton instance=null;
 	private Singleton() {};
@@ -88,4 +83,71 @@ class FriutFactory {
       return f;  
    }  
 }  
+```
+### 工厂方法模式
++ 定义一个创建对象的接口，但由子类决定要实例化的类是哪一个。工厂方法模式把类实例化的过程推迟到子类。
+``` java 
+package com.zhy.pattern.factory.b;
+ 
+public abstract class RoujiaMoStore
+{
+	public abstract RouJiaMo createRouJiaMo(String type);
+	public RouJiaMo sellRouJiaMo(String type)
+	{
+		RouJiaMo rouJiaMo = createRouJiaMo(type);
+		rouJiaMo.prepare();
+		rouJiaMo.fire();
+		rouJiaMo.pack();
+		return rouJiaMo;
+	}
+ 
+}
+
+
+public class XianRouJiaMoStore extends RoujiaMoStore
+{
+	@Override
+	public RouJiaMo createRouJiaMo(String type)
+	{
+		RouJiaMo rouJiaMo = null;
+		if (type.equals("Suan"))
+		{
+			rouJiaMo = new XianSuanRouJiaMo();
+		} else if (type.equals("Tian"))
+		{
+			rouJiaMo = new XianTianRouJiaMo();
+		} else if (type.equals("La"))
+		{
+			rouJiaMo = new XianLaRouJiaMo();
+		}
+		return rouJiaMo;
+	}
+}
+```
+
+## 抽象工厂模式
++ 提供一个接口，用于创建相关的或依赖对象的家族，而不需要明确指定具体类。
+``` java 
+package com.zhy.pattern.factory.b;
+public interface RouJiaMoYLFactroy
+{
+	public Meat createMeat();
+	public YuanLiao createYuanliao();
+}
+
+public class XianRouJiaMoYLFactroy implements RouJiaMoYLFactroy
+{
+ 
+	@Override
+	public Meat createMeat()
+	{
+		return new FreshMest();
+	}
+
+	@Override
+	public YuanLiao createYuanliao()
+	{
+		return new XianTeSeYuanliao();
+	}
+}
 ```
