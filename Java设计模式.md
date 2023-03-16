@@ -180,3 +180,34 @@ public class LenovoBuilder extends Builder {
     }
 }
 ```
+
+## 原型模式（克隆模式）
++ 原型模式是用于高性能创建重复的对象
+``` java 
+class Diploma implements Cloneable{
+	String name; //姓名
+	String term; //学期
+	String school; //学校
+	String month; //颁发月份
+	String date; //颁发日期
+	
+	public Diploma(String name,String term,String school,String month,String date){
+		this.name = name;
+		this.term = term;
+		this.school = school;
+		this.month = month;
+		this.date = date;
+	}
+	protected Object clone() throws CloneNotSupportedException {
+		return (Diploma) super.clone(); // 高性能的关键代码
+	}
+}
+public class prototypeDemo {
+	public static void main(String[] args) throws CloneNotSupportedException {
+		Diploma dma = new Diploma("张三", "一", "Oracle", "10", "10");
+		//原型模式，提供一个clone方法
+		Diploma dma2 = (Diploma) dma.clone();
+		dma2.setName("李四");
+    }
+}
+```
