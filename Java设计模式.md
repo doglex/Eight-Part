@@ -651,3 +651,41 @@ public class MediatorPatternDemo {
    }
 }
 ```
+
+## 备忘录模式
++ 在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态
+``` java 
+public class Memento {
+   private String state;
+   public Memento(String state){
+      this.state = state;
+   }
+   public String getState(){
+      return state;
+   }  
+}
+public class Originator {
+   private String state;
+   public void setState(String state){
+      this.state = state;
+   }
+   public String getState(){
+      return state;
+   }
+   public Memento saveStateToMemento(){
+      return new Memento(state);
+   }
+   public void getStateFromMemento(Memento Memento){
+      state = Memento.getState();
+   }
+}
+public class CareTaker {
+   private List<Memento> mementoList = new ArrayList<Memento>();
+   public void add(Memento state){
+      mementoList.add(state);
+   }
+   public Memento get(int index){
+      return mementoList.get(index);
+   }
+}
+```
