@@ -535,3 +535,41 @@ public class ComputerOffCommond implements Command
 	}
 }
 ```
+
+## 迭代器模式
++ 提供一种方法顺序访问一个聚合对象中各个元素, 而又无须暴露该对象的内部表示
+```
+public interface Iterator {
+   public boolean hasNext();
+   public Object next();
+}
+public interface Container {
+   public Iterator getIterator();
+}
+public class NameRepository implements Container {
+   public String[] names = {"Robert" , "John" ,"Julie" , "Lora"};
+ 
+   @Override
+   public Iterator getIterator() {
+      return new NameIterator();
+   }
+ 
+   private class NameIterator implements Iterator {
+      int index;
+      @Override
+      public boolean hasNext() {
+         if(index < names.length){
+            return true;
+         }
+         return false;
+      }
+      @Override
+      public Object next() {
+         if(this.hasNext()){
+            return names[index++];
+         }
+         return null;
+      }     
+   }
+}
+```
