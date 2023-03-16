@@ -262,8 +262,8 @@ public class Test
 ```
 
 ## 桥接模式
-+ 把抽象化与实现化解耦
-```
++ 把抽象与实现解耦
+``` java
 public interface DrawAPI {  // 抽象
    public void drawCircle(int radius, int x, int y);
 }
@@ -287,3 +287,78 @@ public class Circle extends Shape {  // 实现
    }
 }
 ```
+
+## 装饰模式
++ 动态地将责任附加到对象上。不断的包起来
+```
+// 定义抽象构件：抽象商品
+public interface ItemComponent {
+    public double checkoutPrice();
+}
+
+// 定义具体构件：具体商品
+public class ConcreteItemCompoment implements ItemComponent {
+    public double checkoutPrice() {
+        return 200.0;
+    }
+}
+
+// 定义抽象装饰者：创建传参(抽象构件)构造方法，以便给具体构件增加功能
+public abstract class ItemAbsatractDecorator implements ItemComponent {
+    protected ItemComponent itemComponent;
+    public ItemAbsatractDecorator(ItemComponent myItem) {
+        this.itemComponent = myItem;
+    }
+    public double checkoutPrice() {
+        return this.itemComponent.checkoutPrice();
+    }
+}
+
+// 定义具体装饰者A：增加店铺折扣八折
+public class ShopDiscountDecorator extends ItemAbsatractDecorator {
+    public ShopDiscountDecorator(ItemComponent myItem) {
+        super(myItem);
+    }
+    @Override
+    public double checkoutPrice() {
+        return 0.8 * super.checkoutPrice();
+    }
+} 
+
+public class FullReductionDecorator extends ItemAbsatractDecorator {
+    public FullReductionDecorator(ItemComponent myItem) {
+        super(myItem);
+    }
+    @Override  
+    public double checkoutPrice() {
+        return super.checkoutPrice() - 20;  
+    }
+}
+
+// 定义具体装饰者C：增加百亿补贴券50
+public class BybtCouponDecorator extends ItemAbsatractDecorator { 
+    public BybtCouponDecorator(ItemComponent myItem) {
+        super(myItem);
+    }
+    
+    @Override
+    public double checkoutPrice() {
+        return super.checkoutPrice() - 50;
+    }
+}
+    
+//客户端调用
+public class userPayForItem() {
+    public static void main(String[] args) {
+        ItemCompoment item = new ConcreteItemCompoment();
+        System.out.println("宝贝原价：" + item.checkoutPrice() + " 元"）; 
+        item = new ShopDiscountDecorator(item);
+        System.out.println("使用店铺折扣后需支付：" + item.checkoutPrice() + " 元"）;
+        item = new FullReductionDecorator(item);
+        System.out.println("使用满200减20后需支付：" + item.checkoutPrice() + " 元"）;
+        item = new BybtCouponDecorator(item);
+        System.out.println("使用百亿补贴券后需支付：" + item.checkoutPrice() + " 元"）;      
+    }
+}
+```
+> 非常的不直观，为什么不设计成一个类下的几个方法呢
