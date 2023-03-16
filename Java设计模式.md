@@ -34,17 +34,20 @@ public class Singleton {
 	}
 }
 ```
-+ 懒汉式(线程安全): 按需创建，创建时加锁
-```
-public class Singleton7 {
++ 懒汉式(线程安全): 按需创建，创建时加锁。多重判定是否要创建
+``` java
+public class Singleton {
 	private static Singleton instance=null;
-	public static Singleton getInstance() {
-		if (instance == null) {
-			synchronized (Singleton.class) {
-				instance = new Singleton();
-			}
-		}
-		return instance;
+	private Singleton() {};
+	public static Singleton getInstance(){
+		 if (instance == null) {   // 预判定
+	          synchronized (Singleton.class) {  
+	              if (instance == null) {   // 得锁后重新判定
+	            	  instance = new Singleton();  
+	              }  
+	          }  
+	      }  
+	      return instance;  
 	}
 }
 ```
