@@ -455,3 +455,45 @@ public class ProxyImage implements Image{
    }
 }
 ```
+
+## 模板方法
++ 可以在不改变子类代码的情况下，重新定义算法的步骤
+``` java 
+public abstract class Worker
+{
+	protected String name;
+ 
+	public Worker(String name)
+	{
+		this.name = name;
+	}
+ 
+	public final void workOneDay()  // 这里可以改
+	{
+		enterCompany();
+		computerOn();
+		work();
+		computerOff();
+		exitCompany();
+	}
+	public abstract void work();
+	private void computerOff()
+	{
+		System.out.println(name + "关闭电脑");
+	}
+	private void computerOn()
+	{
+		System.out.println(name + "打开电脑");
+	}
+ 
+	public void enterCompany()
+	{
+		System.out.println(name + "进入公司");
+	}
+	public void exitCompany()
+	{
+		System.out.println(name + "离开公司");
+	}
+ 
+}
+```
