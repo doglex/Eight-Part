@@ -1,5 +1,7 @@
 ## 设计模式列表
 > 参考 https://github.com/youlookwhat/DesignPattern
+
+> 参考 https://www.runoob.com/design-pattern/visitor-pattern.html
 + **创建型模式**：单例模式、抽象工厂模式、建造者模式、工厂模式、原型模式
 + **结构型模式**：适配器模式、桥接模式、装饰模式、组合模式、外观模式、享元模式、代理模式
 + **行为型模式**：模版方法模式、命令模式、迭代器模式、观察者模式、中介者模式、备忘录模式、解释器模式、状态模式、策略模式、责任链模式、访问者模式
@@ -739,4 +741,72 @@ private static AbstractLogger getChainOfLoggers(){
       fileLogger.setNextLogger(consoleLogger); // 连起来
       return errorLogger;  
    }
+```
+
+## 访问者模式
++ 将数据结构与数据操作分离。稳定的数据结构和易变的操作耦合问题
+``` java 
+public interface ComputerPart {
+   public void accept(ComputerPartVisitor computerPartVisitor);
+}
+public class Keyboard  implements ComputerPart {
+   public void accept(ComputerPartVisitor computerPartVisitor) {
+      computerPartVisitor.visit(this);
+   }
+}
+public class Monitor  implements ComputerPart {
+   public void accept(ComputerPartVisitor computerPartVisitor) {
+      computerPartVisitor.visit(this);
+   }
+}
+public class Mouse  implements ComputerPart {
+   public void accept(ComputerPartVisitor computerPartVisitor) {
+      computerPartVisitor.visit(this);
+   }
+}
+
+public class Computer implements ComputerPart {
+   ComputerPart[] parts;
+   public Computer(){
+      parts = new ComputerPart[] {new Mouse(), new Keyboard(), new Monitor()};      
+   } 
+   @Override
+   public void accept(ComputerPartVisitor computerPartVisitor) {
+      for (int i = 0; i < parts.length; i++) {
+         parts[i].accept(computerPartVisitor);
+      }
+      computerPartVisitor.visit(this);
+   }
+}
+public interface ComputerPartVisitor {
+   public void visit(Computer computer);
+   public void visit(Mouse mouse);
+   public void visit(Keyboard keyboard);
+   public void visit(Monitor monitor);
+}
+
+public class ComputerPartDisplayVisitor implements ComputerPartVisitor {
+   @Override
+   public void visit(Computer computer) {
+      System.out.println("Displaying Computer.");
+   }
+   @Override
+   public void visit(Mouse mouse) {
+      System.out.println("Displaying Mouse.");
+   }
+   @Override
+   public void visit(Keyboard keyboard) {
+      System.out.println("Displaying Keyboard.");
+   }
+   @Override
+   public void visit(Monitor monitor) {
+      System.out.println("Displaying Monitor.");
+   }
+}
+public class VisitorPatternDemo {
+   public static void main(String[] args) {
+      ComputerPart computer = new Computer();
+      computer.accept(new ComputerPartDisplayVisitor());
+   }
+}
 ```
