@@ -497,3 +497,41 @@ public abstract class Worker
  
 }
 ```
+
+## 命令模式
++ 将请求封装成对象，将动作请求者和动作执行者解耦
++ 就是说，用的人只用记住execute这个名字
+``` java
+public interface Command
+{
+	public void execute();
+}
+
+public class LightOnCommond implements Command
+{
+	private Light light ; 
+	public LightOnCommond(Light light)
+	{
+		this.light = light;
+	}
+	@Override
+	public void execute()
+	{
+		light.on();
+	}
+}
+
+public class ComputerOffCommond implements Command
+{
+	private Computer computer ; 
+	public ComputerOffCommond( Computer computer)
+	{
+		this.computer = computer;
+	}
+	@Override
+	public void execute()
+	{
+		computer.off();
+	}
+}
+```
