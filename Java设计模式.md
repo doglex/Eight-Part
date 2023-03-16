@@ -362,3 +362,24 @@ public class userPayForItem() {
 }
 ```
 > 非常的不直观，为什么不设计成一个类下的几个方法呢
+
+## 组合模式(部分整体模式)
++ 把一组相似的对象当作一个单一的对象。就是带有自身对象列表的类,可以层次构造归属关系
+```
+public class Employee {
+   private List<Employee> subordinates;
+   public Employee(String name,String dept, int sal) {
+      this.name = name;
+      this.dept = dept;
+      this.salary = sal;
+      subordinates = new ArrayList<Employee>();
+   }
+   public void add(Employee e) {
+      subordinates.add(e);
+   }
+   public List<Employee> getSubordinates(){
+     return subordinates;
+   } 
+}
+```
+
