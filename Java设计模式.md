@@ -417,3 +417,41 @@ public class ShapeFactory {
    }
 }
 ```
+
+## 代理模式
++ 一个类代表另一个类, 职责清晰
+``` java 
+public interface Image {
+   void display();
+}
+
+public class RealImage implements Image {
+   private String fileName;
+   public RealImage(String fileName){
+      this.fileName = fileName;
+      loadFromDisk(fileName);
+   }
+   @Override
+   public void display() {
+      System.out.println("Displaying " + fileName);
+   }
+   private void loadFromDisk(String fileName){
+      System.out.println("Loading " + fileName);
+   }
+}
+
+public class ProxyImage implements Image{
+   private RealImage realImage;
+   private String fileName;
+   public ProxyImage(String fileName){
+      this.fileName = fileName;
+   }
+   @Override
+   public void display() {
+      if(realImage == null){
+         realImage = new RealImage(fileName);
+      }
+      realImage.display();
+   }
+}
+```
