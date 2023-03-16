@@ -10,7 +10,7 @@
 + **行为型模式**：模版方法模式、命令模式、迭代器模式、观察者模式、中介者模式、备忘录模式、解释器模式、状态模式、策略模式、责任链模式、访问者模式
 
 ## 单例模式
-+ 单例模式主要是为了避免(多个线程)因为创建了多个实例造成资源的浪费，且多个实例由于多次调用容易导致结果出现错误，而使用单例模式能够保证整个应用中有且只有一个实例。
++ 减少资源浪费，或者需要全局(多线程)统一的一个实例
 + 饿汉式(线程安全)：一开始就创建到static上，注意static变量是在堆区
 ``` java
 public class Singleton {
@@ -50,4 +50,42 @@ public class Singleton {
 	      return instance;  
 	}
 }
+```
+
+## 工厂模式
++ 为了创建对象的时候方便一点，或者要统一管理
+
+### 静态工厂模式
++ 传一个字符串，生成对象
+``` java 
+package com.xiang.staticfactory;  
+interface Friut {  
+   public void say();  
+}  
+class Apple implements Friut {  
+   public void say() {  
+      System.out.println("I am an Apple");  
+   }  
+}  
+class Grape implements Friut {  
+   public void say() {  
+      System.out.println("I am a Grape");  
+   }  
+} 
+class FriutFactory {  
+   public static Friut getFriut(String type) {  
+      Friut f = null;  
+      try {  
+        f = (Friut) Class.forName("com.xiang.staticfactory." + type)  
+              .newInstance();  
+      } catch (InstantiationException e) {  
+        e.printStackTrace();  
+      } catch (IllegalAccessException e) {  
+        e.printStackTrace();  
+      } catch (ClassNotFoundException e) {  
+        e.printStackTrace();  
+      }  
+      return f;  
+   }  
+}  
 ```
