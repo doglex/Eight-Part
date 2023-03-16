@@ -573,3 +573,54 @@ public class NameRepository implements Container {
    }
 }
 ```
+
+## 观察者模式
++ 对象之间的一对多的依赖，这样一来，当一个对象改变时，它的所有的依赖者都会收到通知并自动更新
+``` java 
+
+public interface Subject
+{
+	public void registerObserver(Observer observer);
+	public void removeObserver(Observer observer);
+	public void notifyObservers();
+}
+public interface Observer
+{
+	public void update(String msg);
+}
+public class ObjectFor3D implements Subject
+{
+	private List<Observer> observers = new ArrayList<Observer>();
+	private String msg;
+ 
+	@Override
+	public void registerObserver(Observer observer)
+	{
+		observers.add(observer);
+	}
+ 
+	@Override
+	public void removeObserver(Observer observer)
+	{
+		int index = observers.indexOf(observer);
+		if (index >= 0)
+		{
+			observers.remove(index);
+		}
+	}
+ 
+	@Override
+	public void notifyObservers()
+	{
+		for (Observer observer : observers)
+		{
+			observer.update(msg);
+		}
+	}
+	public void setMsg(String msg)
+	{
+		this.msg = msg;
+		notifyObservers(); // 更新时自动通知观察者
+	}
+}
+```
