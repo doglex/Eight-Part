@@ -292,7 +292,7 @@ public class Circle extends Shape {  // 实现
 
 ## 装饰模式
 + 动态地将责任附加到对象上。不断的包起来
-```
+``` java
 // 定义抽象构件：抽象商品
 public interface ItemComponent {
     public double checkoutPrice();
@@ -367,7 +367,7 @@ public class userPayForItem() {
 
 ## 组合模式(部分整体模式)
 + 把一组相似的对象当作一个单一的对象。就是带有自身对象列表的类,可以层次构造归属关系
-```
+``` java
 public class Employee {
    private List<Employee> subordinates;
    public Employee(String name,String dept, int sal) {
@@ -405,7 +405,7 @@ public void watchMovie()
 + 减少创建的对象数量，从而减小内存和提高性能
 + 就是复用那个对象，那个对象可以更改属性后访问
 + 类似于单例模式允许实例多一点，hashmap缓存起来
-```
+``` java
 public class ShapeFactory {
    private static final HashMap<String, Shape> circleMap = new HashMap<>();
    public static Shape getCircle(String color) {
@@ -540,7 +540,7 @@ public class ComputerOffCommond implements Command
 
 ## 迭代器模式
 + 提供一种方法顺序访问一个聚合对象中各个元素, 而又无须暴露该对象的内部表示
-```
+``` java
 public interface Iterator {
    public boolean hasNext();
    public Object next();
@@ -694,7 +694,7 @@ public class CareTaker {
 
 ## 解释器模式
 + 给定一个语言，定义它的文法表示，并定义一个解释器，这个解释器使用该标识来解释语言中的句子
-```
+``` java
 public interface Expression {
    public boolean interpret(String context);
 }
