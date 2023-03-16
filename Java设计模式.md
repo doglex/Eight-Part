@@ -689,3 +689,54 @@ public class CareTaker {
    }
 }
 ```
+
+## 解释器模式
++ 给定一个语言，定义它的文法表示，并定义一个解释器，这个解释器使用该标识来解释语言中的句子
+```
+public interface Expression {
+   public boolean interpret(String context);
+}
+```
+
+## 状态模式
++ 状态影响行为
++ 类内定义多个状态，方法根据状态调整行为
+
+## 策略模式
++ 定义了算法族，分别封装起来，让它们之间可相互替换，此模式让算法的变化独立于使用算法的客户
++ 把行为类set到类里即可 https://blog.csdn.net/lmj623565791/article/details/24116745
+
+## 责任链模式
++ 将这些对象连接成一条链，并且沿着这条链传递请求，直到有对象处理它为止。
+``` java 
+public abstract class AbstractLogger {
+   public static int INFO = 1;
+   public static int DEBUG = 2;
+   public static int ERROR = 3;
+   protected int level;
+   protected AbstractLogger nextLogger; // 最重要的地方
+   public void setNextLogger(AbstractLogger nextLogger){
+      this.nextLogger = nextLogger;
+   }
+ 
+   public void logMessage(int level, String message){
+      if(this.level <= level){
+         write(message);
+      }
+      if(nextLogger !=null){
+         nextLogger.logMessage(level, message);
+      }
+   }
+   abstract protected void write(String message);
+}
+
+private static AbstractLogger getChainOfLoggers(){
+      AbstractLogger errorLogger = new ErrorLogger(AbstractLogger.ERROR);
+      AbstractLogger fileLogger = new FileLogger(AbstractLogger.DEBUG);
+      AbstractLogger consoleLogger = new ConsoleLogger(AbstractLogger.INFO);
+ 
+      errorLogger.setNextLogger(fileLogger); // 连起来
+      fileLogger.setNextLogger(consoleLogger); // 连起来
+      return errorLogger;  
+   }
+```
