@@ -624,3 +624,30 @@ public class ObjectFor3D implements Subject
 	}
 }
 ```
+
+## 中介者模式
++ 用一个中介对象来封装一系列的对象交互，中介者使各对象不需要显式地相互引用
+``` java 
+public class ChatRoom {
+   public static void showMessage(User user, String message){
+      System.out.println(new Date().toString()
+         + " [" + user.getName() +"] : " + message);
+   }
+}
+public class User {
+   public User(String name){
+      this.name  = name;
+   }
+   public void sendMessage(String message){
+      ChatRoom.showMessage(this,message);
+   }
+}
+public class MediatorPatternDemo {
+   public static void main(String[] args) {
+      User robert = new User("Robert");
+      User john = new User("John");
+      robert.sendMessage("Hi! John!");
+      john.sendMessage("Hello! Robert!");
+   }
+}
+```
