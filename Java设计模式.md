@@ -260,3 +260,30 @@ public class Test
 	}
 }
 ```
+
+## 桥接模式
++ 把抽象化与实现化解耦
+```
+public interface DrawAPI {  // 抽象
+   public void drawCircle(int radius, int x, int y);
+}
+public abstract class Shape {  // 继续抽象
+   protected DrawAPI drawAPI;
+   protected Shape(DrawAPI drawAPI){
+      this.drawAPI = drawAPI;
+   }
+   public abstract void draw();  
+}
+public class Circle extends Shape {  // 实现
+   private int x, y, radius;
+   public Circle(int x, int y, int radius, DrawAPI drawAPI) {
+      super(drawAPI);
+      this.x = x;  
+      this.y = y;  
+      this.radius = radius;
+   }
+   public void draw() {
+      drawAPI.drawCircle(radius,x,y);
+   }
+}
+```
