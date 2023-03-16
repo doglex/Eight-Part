@@ -151,3 +151,32 @@ public class XianRouJiaMoYLFactroy implements RouJiaMoYLFactroy
 	}
 }
 ```
+
+## 建造者模式
++ 对象需要由多个组件组装起来,就搞个Builder
+``` java 
+public class Computer {
+    private String screen;
+    private String mouse;
+    private String cpu;
+}
+
+public abstract class Builder {
+    abstract Builder buildScreen(String screen);
+    abstract Builder buildMouse(String mouse);
+    abstract Builder buildCpu(String cpu);
+    abstract Computer build();
+}
+
+public class LenovoBuilder extends Builder {
+    private Computer computer = new Computer();
+    Builder buildScreen(String screen) {
+        computer.setScreen(screen);
+        return this;
+    }
+    Computer build() {
+        System.out.println("构建中...");
+        return computer;
+    }
+}
+```
