@@ -398,3 +398,22 @@ public void watchMovie()
 		player.make3DListener();
 }
 ```
+
+## 享元模式
++ 减少创建的对象数量，从而减小内存和提高性能
++ 就是复用那个对象，那个对象可以更改属性后访问
++ 类似于单例模式允许实例多一点，hashmap缓存起来
+```
+public class ShapeFactory {
+   private static final HashMap<String, Shape> circleMap = new HashMap<>();
+   public static Shape getCircle(String color) {
+      Circle circle = (Circle)circleMap.get(color);
+      if(circle == null) {
+         circle = new Circle(color);
+         circleMap.put(color, circle);
+         System.out.println("Creating circle of color : " + color);
+      }
+      return circle;
+   }
+}
+```
