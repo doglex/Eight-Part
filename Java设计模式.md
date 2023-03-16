@@ -383,3 +383,18 @@ public class Employee {
 }
 ```
 
+## 外观模式
++ 提供一个统一的接口，用来访问子系统中的一群接口.提供一键访问的功能
+``` java 
+public void watchMovie()
+	{
+		popper.on();
+		popper.makePopcorn();
+		light.down();
+		projector.on();
+		projector.open();
+		computer.on();
+		player.on();
+		player.make3DListener();
+}
+```
