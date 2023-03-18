@@ -24,7 +24,7 @@ Spring Boot异步 & Spring MVC 同步)
 > 异步和同步是可以混合使用的
 
 ## Spring MVC 到 Spring Boot
-+ 繁重的xml配置可选的使用注解
++ 繁重的xml配置可选的使用 注解、yml
 + started可以简化配置
 + 一键启动，不用额外部署war到Tomcat上
 + 自动监控Actuator，可以在REST访问性能数据
