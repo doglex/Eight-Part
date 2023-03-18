@@ -63,7 +63,6 @@ public class DemoApplication {
 package com.example.demo.ctrl;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -77,3 +76,4 @@ public class Hello {
     }
 }
 ```
++ 可以在点击application的箭头运行，也可以打成jar包运行
