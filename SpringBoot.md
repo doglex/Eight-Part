@@ -12,6 +12,7 @@
 + Web服务：WebMVC、WebSocket、WebFlux
 + 核心容器：Beans(IoC)、AOP、Context、Instrument
 + 自动配置、度量监控、一键部署
++ 集成了Tomcat、Jetty、Netty、Servlet可供选择
 
 ## 框架
 spring + web
