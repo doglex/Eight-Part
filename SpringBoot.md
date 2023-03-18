@@ -8,4 +8,6 @@
 + 事件驱动
 + Serverless架构
 + 批处理(Spring Batch)
-
++ 数据访问：JDBC、ORM、Transactions
++ Web服务：WebMVC、WebSocket、WebFlux
++ 核心容器：Beans(IoC)、AOP、Context、Instrument
