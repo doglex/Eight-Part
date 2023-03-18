@@ -29,3 +29,5 @@ Spring Boot异步 & Spring MVC 同步)
 + 一键启动，不用额外部署war到Tomcat上
 + 自动监控Actuator，可以在REST访问性能数据
 
+## 代码架构
+![](assets/spring3.png)
