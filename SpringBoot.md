@@ -11,3 +11,10 @@
 + 数据访问：JDBC、ORM、Transactions
 + Web服务：WebMVC、WebSocket、WebFlux
 + 核心容器：Beans(IoC)、AOP、Context、Instrument
++ 自动配置、度量监控、一键部署
+
+## 框架
+spring + web
+![](assets/sprintbootframework.png)
+
+
