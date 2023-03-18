@@ -31,3 +31,14 @@ Spring Boot异步 & Spring MVC 同步)
 
 ## 代码架构
 ![](assets/spring3.png)
+
+## Hello World
++ 可以通过引入依赖使用spring-boot-starter-web
+```
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-web</artifactId>
+<version>3.0.4</version>
+```
++ 可以用spring initialiezr网站 start.spring.io 
++ 可以安装 spring boot helper插件，新建项目,建好后在project文件夹上右键“Add Framework Support”选择Maven
+> 若出现spring版本不对，则换一个低的parent的版本
