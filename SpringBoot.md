@@ -42,3 +42,38 @@ Spring Boot异步 & Spring MVC 同步)
 + 可以用spring initialiezr网站 start.spring.io 
 + 可以安装 spring boot helper插件，新建项目,建好后在project文件夹上右键“Add Framework Support”选择Maven
 > 若出现spring版本不对，则换一个低的parent的版本
++ 启动类需要在高层次、controller在低层次
+``` java
+// src/main/java/com/example/demo/DemoApplication.java
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(DemoApplication.class, args);
+	}
+
+}
+
+// src/main/java/com/example/demo/ctrl/Hello.java
+package com.example.demo.ctrl;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+public class Hello {
+
+    @RequestMapping(value = "/")
+    @ResponseBody
+    public String hello() {
+        return "hello world";
+    }
+}
+```
