@@ -112,3 +112,22 @@ private int point;
 + @EnableAutoConfiguration 包含以下2个注解
 + @AutoConfigurationPackage 对该注解下的包进行自动配置
 + @Import(AutoConfigurationPackages.Registrar.class) 用来动态创建Bean
++ SpringBoot提供了100多个AutoConfiguration类
++ @ConditionalOn 按条件确定是否装配
+
+
+## JDK的SPI机制
++ ![](assets/spring4.png)
++ SpringFactoriesLoader 类是类似的技术实现配置加载，放在META-INF/spring.factories文件夹下
+
+
+## Bean
++ In Spring, the objects that form the backbone of your application and that are managed by the Spring IoC container are called beans. A bean is an object that is instantiated, assembled, and otherwise managed by a Spring IoC container.
++ 在 Spring 中，构成应用程序主干并由Spring IoC容器管理的对象称为bean。bean是一个由Spring IoC容器实例化、组装和管理的对象。
++ IoC就是一个对象定义其依赖关系而不创建它们的过程
++ Bean容器，或称spring ioc容器，主要用来管理对象和依赖，以及依赖的注入
++ bean是一个Java对象，根据bean规范编写出来的类，并由bean容器生成的对象就是一个bean
++ 所有属性为private
++ 提供默认构造方法
++ 提供getter和setter
++ 实现serializable接口
