@@ -77,3 +77,15 @@ public class Hello {
 }
 ```
 + 可以在点击application的箭头运行，也可以打成jar包运行
+
+## 术语
++ 端点： Endpoint，即一个url路径
++ label：版本控制信息
++ profile：配置文件对应的环境
+```
+/{application}-{profile}.yml
+/{label}/{application}-{profile}.yml
+/{application}-{profile}.properties
+/{label}/{application}-{profile}.properties
+```
+
