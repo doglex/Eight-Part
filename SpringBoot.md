@@ -134,4 +134,10 @@ private int point;
 
 ## JDBC， Java DataBase Connectivity
 + ![](assets/spring5.png)
-+ DriverManager、DataSource、Connection、Statement、ResultSet
++ DriverManager、DataSource(连接池)、Connection、Statement、ResultSet
++ JdbcTemplate: Spring提供的JDBC方便访问的类
++ SimpleJdbcInsert: 在JdbcTemplate基础上提供批量插入操作
+
+## Spring注入
++ 编写代码，指定构造器(留给spring去注入)、指定set方法
++ 编写xml配置，配个各个对象的关系，交给Spring去new对象，并且对象传递到另一个对象的属性中
