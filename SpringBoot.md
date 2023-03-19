@@ -131,3 +131,7 @@ private int point;
 + 提供默认构造方法
 + 提供getter和setter
 + 实现serializable接口
+
+## JDBC， Java DataBase Connectivity
++ ![](assets/spring5.png)
++ DriverManager、DataSource、Connection、Statement、ResultSet
