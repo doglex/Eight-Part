@@ -81,7 +81,7 @@ public class Hello {
 ## 术语
 + 端点： Endpoint，即一个url路径
 + label：版本控制信息
-+ profile：配置文件对应的环境
++ profile：配置文件对应的环境dev、prod等
 ```
 /{application}-{profile}.yml
 /{label}/{application}-{profile}.yml
@@ -91,3 +91,12 @@ public class Hello {
 + 可以用yml也可以用properties文件配置
 + 在application.properties设置spring.profiles.active=test则会启用application-test.properties，也可以在运行时指定该参数
 + 可以用注解确定环境 @Profile("prod")
++ @Value注解可以注入配置项内容
+```
+@Value("${springcss.order.point}")
+private int point;
+```
++ @ConfigurationProperties 可以用前缀注入多个值,或者注入到HashMap中
+```
+@ConfigurationProperties(prefix="springcss.order")
+```
