@@ -88,4 +88,6 @@ public class Hello {
 /{application}-{profile}.properties
 /{label}/{application}-{profile}.properties
 ```
-
++ 可以用yml也可以用properties文件配置
++ 在application.properties设置spring.profiles.active=test则会启用application-test.properties，也可以在运行时指定该参数
++ 可以用注解确定环境 @Profile("prod")
