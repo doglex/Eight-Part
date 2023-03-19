@@ -104,3 +104,11 @@ private int point;
 + @PropertySources 可以指定从哪些配置文件中获得配置信息
 + spring.config.location 可以指定配置文件的默认加载位置
 + 多个地方存在application.properties时，则高优先级的会覆盖低优先级的值
+
+## AutoConfiguration 自动配置
++ @SpringBootApplication 包含下面三个注解
++ @ComponentScan 扫描基于@Component类所在包下所有的需要注入的类，并把相关Bean定义批量加载到容器中
++ @SpringBootConfiguration 是空注解，使用了@Configuration注解，提供就JavaConfig配置类的实现
++ @EnableAutoConfiguration 包含以下2个注解
++ @AutoConfigurationPackage 对该注解下的包进行自动配置
++ @Import(AutoConfigurationPackages.Registrar.class) 用来动态创建Bean
