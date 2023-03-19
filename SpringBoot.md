@@ -138,7 +138,7 @@ private int point;
 + DriverManager、DataSource(连接池)、Connection、Statement、ResultSet
 + JdbcTemplate: Spring提供的JDBC方便访问的类
 + SimpleJdbcInsert: 在JdbcTemplate基础上提供批量插入操作
-+ SpringData: 提供ORM功能
++ Spring Data JPA: 提供ORM功能，可以结合@Query注解
 
 ## Spring注入
 参考 https://zhuanlan.zhihu.com/p/29426019
