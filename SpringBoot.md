@@ -100,3 +100,7 @@ private int point;
 ```
 @ConfigurationProperties(prefix="springcss.order")
 ```
++ @PropertySource 可以指定从哪个配置文件中获得配置信息
++ @PropertySources 可以指定从哪些配置文件中获得配置信息
++ spring.config.location 可以指定配置文件的默认加载位置
++ 多个地方存在application.properties时，则高优先级的会覆盖低优先级的值
