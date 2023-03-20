@@ -189,3 +189,45 @@ isPrototype 是否不是单例
 ```
 + BeanFactory具有 子接口 ApplicationContext。扩展了MessageSource、EnvironmentCapable、ApplicationEventPublisher、ResourcePatternResolver功能
 + Spring Boot中通过注解装配Bean到IoC容器中
+``` java 
+// --------- User.java 
+package ioc;
+// POJO，Plain Ordinary Java Object
+public class User {
+    private Long id;
+    private String userName;
+    private String note;
+    /** setters and getters **/
+}
+
+// ---------ConfigIt.java 
+package ioc;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration  // 需要在注解类里注册Bean
+public class ConfigIt {
+
+    @Bean(name="user")  // 注册名为user，若不填name参数，则注册为initUser。@Bean表示容器装配
+    public User initUser(){
+        User user = new User();
+        user.setId(1L);
+        user.setUserName("user_name_1");
+        user.setNote("note1");
+        return user;
+    }
+}
+
+// ----------testIoc.java 
+package ioc;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class testIoc {
+    public static void main(String[] args) {
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(ConfigIt.class);
+        User user = ctx.getBean(User.class);
+        System.out.println(user.getUserName());
+    }
+}
+```
