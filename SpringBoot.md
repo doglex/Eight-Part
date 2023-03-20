@@ -176,4 +176,8 @@ debug=true // 开启更多信息
 + 类似返回html文件，只是返回jsp文件
 + 参考 https://blog.csdn.net/weixin_53168000/article/details/126662098
 
-
+## Ioc， Inversion of Control
++ 不用new，而用“描述”来创建对象，并且描述依赖关系
++ 在Spring Boot，是用“注解作为描述”，不再是xml
++ 每个被Spring管理的对象称为 Spring Bean
++ 管理Bean的容器称为 IoC容器
