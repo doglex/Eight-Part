@@ -13,6 +13,8 @@ public @interface 注解名称{
 
 
 ## 例子
+> 分为三步：定义、使用、(反射)读取并执行。最后一步Spring等框架会做的
+
 > 可以通过反射获取注解的属性列表的内容
 ``` java 
 // MyAnnotation.java 
@@ -79,4 +81,28 @@ public class ReadAnnotation {
 + Class
 + 注解类型
 + 以上类型的一维数组
+```
+package x;
 
+public @interface MyAnnotationTypes {
+    int intValues();
+    long longValues();
+    String name();
+    CityEnum cityNames();
+    Class clazz();
+    MyAnnotation2  annotation2();
+    int [] intValueArray();
+    String [] names();
+}
+
+@interface MyAnnotation2 {}
+enum CityEnum {
+    HZ,
+    NB,
+    SH
+}
+```
+
+## 注意事项
++ 若属性列表只有一个value，则使用处传参不必显式指定value = xxx
++ 若数组属性，其中只有一个值时，使用处不必用花括号{}扩起来
