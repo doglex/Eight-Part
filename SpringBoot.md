@@ -14,6 +14,7 @@
 + 自动配置、度量监控、一键部署
 + 集成了Tomcat、Jetty、Netty、Servlet可供选择
 > 约定优于配置
+
 > 内置监控(Actuator):监控内存、JVM、GC等信息
 
 ## 框架
@@ -25,7 +26,7 @@ Spring Boot异步 & Spring MVC 同步)
 
 ## Spring MVC 到 Spring Boot
 + 繁重的xml配置可选的使用 注解、yml
-+ started可以简化配置
++ starter可以简化配置
 + 一键启动，不用额外部署war到Tomcat上
 + 自动监控Actuator，可以在REST访问性能数据
 
