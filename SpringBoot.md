@@ -164,3 +164,16 @@ private int point;
 对没有代码生成，对XML没有要求配置
 ```
 
+## 配置项 Property
++ 主配置文件 application.properties 
++ 配置项列表 https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#appendix.application-properties.web
+```
+server.port=8080  // web端口
+debug=true // 开启更多信息
+```
+
+## JSP配置
++ 类似返回html文件，只是返回jsp文件
++ 参考 https://blog.csdn.net/weixin_53168000/article/details/126662098
+
+
