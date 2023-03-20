@@ -14,7 +14,7 @@ public @interface 注解名称{
 
 
 ## 例子
-> 可以通过反射获取反射内容
+> 可以通过反射获取注解的属性列表的内容
 ``` java 
 // MyAnnotation.java 
 package x;
@@ -66,4 +66,9 @@ public class ReadAnnotation {
 }
 ```
 
-
+## 元注解
++ 加在注解上的注解
++ @Documented 用于制作文档，没什么用
++ @Target 限定该注解的使用位置（如@Target({ElementType.TYPE, ElementType.FIELD,ElementType.METHOD})），不写则没有限定
++ @Retention 注解的保留策略，RetentionPolicy.RUNTIME(保留到运行时)、RetentionPolicy.CLASS 保留到字节码磁盘文件、RetentionPolicy.SOURCE 保留到源代码
+> 反射读不到注解内容时，应该使用@Retention(RetentionPolicy.RUNTIME)
