@@ -231,3 +231,14 @@ public class testIoc {
     }
 }
 ```
+
+## IoC装配、注入
+> 前提是 @Configuration 指明这个是配置类
++ 通过@Bean装配
++ 通过@Component扫描
++ 通过@ComponentScan指定扫描策略。默认扫描该类的当前包和子包。也可以通过basePackages和basePackageClasses指定，或者excludeFilters 排除
++ 通过@Value指定某字段的具体的数值
++ 使用@Bean将第三方包提供的对象放入IoC容器
+
+
+
