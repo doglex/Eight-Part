@@ -13,7 +13,7 @@
 + 核心容器：Beans(IoC)、AOP、Context、Instrument
 + 自动配置、度量监控、一键部署
 + 集成了Tomcat、Jetty、Netty、Servlet可供选择
-> 约定优于配置
+> 约定优于配置的思路。底层仍然是Spring
 
 > 内置监控(Actuator):监控内存、JVM、GC等信息
 
@@ -146,3 +146,21 @@ private int point;
 参考 https://zhuanlan.zhihu.com/p/64001753
 + 编写代码，指定构造器(留给spring去注入)、指定set方法
 + 编写xml配置，配个各个对象的关系，交给Spring去new对象，并且对象传递到另一个对象的属性中
+
+## Spring 历史
++ Sun公司，EJB(Enterprise Java Bean)需要两个配置文件，而**Web容器**调用**EJB容器**又需要配置文件，很麻烦、性能差
++ 2002年音乐家 Rod Johnson 在 《ExpertOne-on-One J2EE Design and Development》 提出Spring的概念
++ 2004， Spring 1.0， 减低代码耦合，IoC、AOP，减少try-catch的编写，集成Hibernate
++ JDK5提供注解功能，Spring 2.0引入少量注解，@Component、@Service
++ Spring 3.0，对于业务类使用注解，对于一些公用的Bean、第三方资源等则使用XML进行配置
++ Spring 4.x大量使用注解
++ 2018年，Spring Boot 2.0 基于Spring 5, 主要使用注解。
+```
+创建独立的Spring应用程序
+嵌入的Tomcat、Jetty或者Undertow，无须部署WAR文件
+允许通过Maven来根据需要获取starter
+尽可能地自动配置Spring
+提供生产就绪型功能，如指标、健康检查和外部配置
+对没有代码生成，对XML没有要求配置
+```
+
