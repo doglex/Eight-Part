@@ -241,4 +241,15 @@ public class testIoc {
 + 通过@Value指定某字段的具体的数值
 + 使用@Bean将第三方包提供的对象放入IoC容器
 + 用@AutoWired 可以(根据类型)从IoC拿到对象来用
+```
+@Autowired 
+private Animal animal = null;
+```
+
+## @Autowired
++ 若找到的类型匹配的Bean对象不止一个，则抛出错误
++ 若不一定找到的可以声明required。@Autowired(required = false) 
++ 可以在待装配的Class上声明是@Primary，则多个冲突时，自动优先用这个
++ @Quelifier 可以根据名称去注入，结合类型和名称
++ 也可以放到函数形参中
 
