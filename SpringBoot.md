@@ -181,3 +181,11 @@ debug=true // 开启更多信息
 + 在Spring Boot，是用“注解作为描述”，不再是xml
 + 每个被Spring管理的对象称为 Spring Bean
 + 管理Bean的容器称为 IoC容器
++ 所有IoC容器都必须实现 BeanFactory 接口。该接口具有以下方法
+```
+getBean 获得Bean，可以按类型或者按名称获取
+isSingleton 是否是单例
+isPrototype 是否不是单例
+```
++ BeanFactory具有 子接口 ApplicationContext。扩展了MessageSource、EnvironmentCapable、ApplicationEventPublisher、ResourcePatternResolver功能
++ Spring Boot中通过注解装配Bean到IoC容器中
