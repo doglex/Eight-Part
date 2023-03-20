@@ -10,7 +10,6 @@ public @interface 注解名称{
 + 使用位置：在类、方法、成员变量、形参
 + 分类：JDK内置注解、第三方框架提供的注解、自定义注解
 + 作用：告诉代码各个地方做什么，也是注释给程序员看的
-+ 可以给getValue属性赋值(getValue是以方法表示的属性)
 
 
 ## 例子
@@ -72,3 +71,12 @@ public class ReadAnnotation {
 + @Target 限定该注解的使用位置（如@Target({ElementType.TYPE, ElementType.FIELD,ElementType.METHOD})），不写则没有限定
 + @Retention 注解的保留策略，RetentionPolicy.RUNTIME(保留到运行时)、RetentionPolicy.CLASS 保留到字节码磁盘文件、RetentionPolicy.SOURCE 保留到源代码
 > 反射读不到注解内容时，应该使用@Retention(RetentionPolicy.RUNTIME)
+
+## 注解可用的属性列表
++ 八种基本数据类型
++ String
++ 枚举
++ Class
++ 注解类型
++ 以上类型的一维数组
+
