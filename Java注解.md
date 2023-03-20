@@ -11,3 +11,32 @@ public @interface 注解名称{
 + 分类：JDK内置注解、第三方框架提供的注解、自定义注解
 + 作用：告诉代码各个地方做什么，也是注释给程序员看的
 + 可以给getValue属性赋值(getValue是以方法表示的属性)
+
+
+## 例子
+``` java 
+// MyAnnotation.java 
+package x;
+public @interface MyAnnotation {
+    String getValue() default "";
+}
+
+// UseMyAnnotation.java
+package x;
+
+@MyAnnotation(getValue = "anno on class")
+public class UseMyAnnotation {
+
+    @MyAnnotation(getValue = "anno on field")
+    public String name;
+
+    @MyAnnotation(getValue = "anno on method")
+    public void hello(){}
+
+    @MyAnnotation() // 自动填入默认值
+    public void defaultMethod(){}
+
+}
+```
+
+
