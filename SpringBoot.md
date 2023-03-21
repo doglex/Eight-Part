@@ -256,6 +256,7 @@ private Animal animal = null;
 ## Bean的生命周期
 + 有时候我们也需要自定义初始化或者销毁Bean的过程
 + 生命周期包括 (1)Bean定义 (2)Bean初始化 (3)Bean生存期 (4)Bean销毁
+![](assets/spring6.png)
 + Bean的定义
 ```
 资源定位：Spring通过我们的配置，如＠ComponentScan定义的扫描路径去找到带有＠Component的类
@@ -264,3 +265,4 @@ private Animal animal = null;
 > 此时还未生成Bean实例
 + Bean初始化：(饿汉式)默认是根据Bean的定义进行实例化，并且根据@Autowired进行注入对应的属性值。
 > (懒汉式)ComponentScan中还有一个配置项lazyInit,可以延迟初始化，使用时再初始化。
++ 可以通过＠PreDestroy定义销毁方法，如数据库连接的关闭
