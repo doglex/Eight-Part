@@ -268,5 +268,11 @@ private Animal animal = null;
 > (懒汉式)ComponentScan中还有一个配置项lazyInit,可以延迟初始化，使用时再初始化。
 + 可以通过＠PreDestroy定义销毁方法，如数据库连接的关闭
 
-
+## Bean的作用域
++ **singleton**：装配为单例，默认情况。
++ **prototype**：每次取值得到一个新的Bean。 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
++ **session**：HTTP会话
++ **application**： Web应用。可以用单例代替
++ request：单次请求
++ globalSession： 在一个全局的HTTPSession中，一个Bean定义对应一个实例。很少用
 
