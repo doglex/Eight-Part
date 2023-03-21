@@ -250,6 +250,17 @@ private Animal animal = null;
 + 若找到的类型匹配的Bean对象不止一个，则抛出错误
 + 若不一定找到的可以声明required。@Autowired(required = false) 
 + 可以在待装配的Class上声明是@Primary，则多个冲突时，自动优先用这个
-+ @Quelifier 可以根据名称去注入，结合类型和名称
++ @Qualifier 可以根据名称去注入，结合类型和名称
 + 也可以放到函数形参中
 
+## Bean的生命周期
++ 有时候我们也需要自定义初始化或者销毁Bean的过程
++ 生命周期包括 (1)Bean定义 (2)Bean初始化 (3)Bean生存期 (4)Bean销毁
++ Bean的定义
+```
+资源定位：Spring通过我们的配置，如＠ComponentScan定义的扫描路径去找到带有＠Component的类
+找到了资源，那么它就开始解析，并且将定义的信息保存起来。把Bean定义发布到SpringIoC容器。
+```
+> 此时还未生成Bean实例
++ Bean初始化：(饿汉式)默认是根据Bean的定义进行实例化，并且根据@Autowired进行注入对应的属性值。
+> (懒汉式)ComponentScan中还有一个配置项lazyInit,可以延迟初始化，使用时再初始化。
