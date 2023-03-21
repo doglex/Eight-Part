@@ -269,10 +269,10 @@ private Animal animal = null;
 + 可以通过＠PreDestroy定义销毁方法，如数据库连接的关闭
 
 ## Bean的作用域
-+ **singleton**：装配为单例，默认情况。
++ **singleton**：装配为单例，默认情况。@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 + **prototype**：每次取值得到一个新的Bean。 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-+ **session**：HTTP会话
-+ **application**： Web应用。可以用单例代替
-+ request：单次请求
++ **session**：HTTP会话。@Scope(WebApplicationContext.SCOPE_SESSION)
++ **application**： Web应用。可以用单例代替。@Scope(WebApplicationContext.SCOPE_APPLICATION)
++ request：单次请求。 @Scope(WebApplicationContext.SCOPE_REQUEST)
 + globalSession： 在一个全局的HTTPSession中，一个Bean定义对应一个实例。很少用
 
