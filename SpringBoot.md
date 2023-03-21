@@ -245,6 +245,7 @@ public class testIoc {
 @Autowired 
 private Animal animal = null;
 ```
++ 条件装配：满足条件才能装配，@Conditional(TheCondition.class)，TheCondition需要实现Condition接口
 
 ## @Autowired
 + 若找到的类型匹配的Bean对象不止一个，则抛出错误
