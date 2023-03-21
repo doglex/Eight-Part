@@ -292,6 +292,14 @@ private Animal animal = null;
 + 按照一定的规则，就可以将自定义的代码织入事先约定的流程中
 + 因此可以减少大量重复的流程代码，自己写的核心逻辑是"织入"到流程中
 > 代码更简洁，可维护性提高
++ Join Point 连接点：具体被拦截的目标，一般就是某个方法
++ Point Cut 切点：通过正则式和指示器适配多个 Join Point
++ Advice 通知：前置通知（before advice）、后置通知（after advice）、环绕通知（around advice）、事后返回通知（afterReturning advice ）、异常通知( afterThrowing advice）
++ Target 目标对象：被代理对象
++ Introduction 引入：引入新的类和其方法，增强现有Bean的功能
++ Weaving 织入：通过**动态代理**技术，为原有服务对象生成代理对象，然后将与切点定义匹配的连接点**拦截**，并按约定将各类通知织入约定流程的过程
++ Aspect 切面：一个可以定义切点、各类通知和引入的内容，SpringAOP将通过它的信息来增强Bean的功能或者将对应的方法织入流程
+![](assets/spring7.png)
 
 
 
