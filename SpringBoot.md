@@ -240,6 +240,7 @@ public class testIoc {
 + 通过@ComponentScan指定扫描策略。默认扫描该类的当前包和子包。也可以通过basePackages和basePackageClasses指定，或者excludeFilters 排除
 + 通过@Value指定某字段的具体的数值。如直接使用配置文件中的值@Value("${database.driverName}")；通过@ConfigurationProperties可以根据前缀批量注入数值；@PropertySource指定从那个配置文件取值
 + 使用@Bean将第三方包提供的对象放入IoC容器
++ 可以用@ImportResource来调用xml文件进行装配：@ImportResource(value={"classpath:spring-other.xml"}) 
 + 用@AutoWired 可以(根据类型)从IoC拿到对象来用
 ```
 @Autowired 
