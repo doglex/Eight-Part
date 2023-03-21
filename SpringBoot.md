@@ -287,4 +287,11 @@ private Animal animal = null;
 + spring.profiles.active 激活不同的配置文件环境
 + spring.profiles.default 默认配置环境
 
+## AOP 约定编程
++ Proxy拦截器约定的例子 https://github.com/doglex/springboot-2.x-learning/tree/master/chapter4/src/main/java/com/springboot/chapter4
++ 按照一定的规则，就可以将自定义的代码织入事先约定的流程中
++ 因此可以减少大量重复的流程代码，自己写的核心逻辑是"织入"到流程中
+> 代码更简洁，可维护性提高
+
+
 
