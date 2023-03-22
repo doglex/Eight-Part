@@ -441,5 +441,16 @@ if (userValidator.validate(user)) {
 }
 ```
 
+## AOP通知获取参数
++ 通过args
++ 通过JointPoint.getArgs() 。若是环绕通知around则需要使用 ProceedingJoinPoint
+```
+@Before("cut() && args(user)")
+    public void before(JoinPoint p, User user) {
+        System.out.println("before user:" + user);
+        System.out.println("before p:" + Arrays.toString(Arrays.stream(p.getArgs()).toArray()));
+        System.out.println("before -------");
+    }
+```
 
 
