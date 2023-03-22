@@ -426,7 +426,19 @@ public class TheApplication {
     }
 ```
 
+## AOP 引入
++ 对一个类的对象在代理对象上增加接口方法
+``` java
+// AOP类，在value类上引入新功能defaultImpl
+@DeclareParents(value= "aop_demo.UserServiceImpl", defaultImpl=UserValidatorImpl.class)
+public UserValidator userValidator;
 
+// Controller类里通过接口转换使用
+UserValidator userValidator = (UserValidator) userService;
+if (userValidator.validate(user)) {
+    userService.printUser(user);
+}
+```
 
 
 
