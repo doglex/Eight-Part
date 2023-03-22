@@ -428,6 +428,7 @@ public class TheApplication {
 
 ## AOP 引入
 + 对一个类的对象在代理对象上增加接口方法
++ 即，代理对象上即有原对象的方法，也有额外的方法
 ``` java
 // AOP类，在value类上引入新功能defaultImpl
 @DeclareParents(value= "aop_demo.UserServiceImpl", defaultImpl=UserValidatorImpl.class)
