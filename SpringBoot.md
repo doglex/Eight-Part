@@ -273,6 +273,11 @@ public class testIoc {
 
 + 通过@Bean装配
 + 通过@Component扫描
+> @Controller和@Service都派生于@Component, 使用上没太大区别，@Controller可以作为MVC的控制器
+
+> @Service 只是声明是业务层代码，没特殊之处
+
+> @Component 是万能的注解，通常加在配置类上
 + 通过@ComponentScan指定扫描策略。默认扫描该类的当前包和子包。也可以通过basePackages和basePackageClasses指定，或者excludeFilters 排除
 + 通过@Value指定某字段的具体的数值。如直接使用配置文件中的值@Value("${database.driverName}")；通过@ConfigurationProperties可以根据前缀批量注入数值；@PropertySource指定从那个配置文件取值
 
@@ -452,5 +457,13 @@ if (userValidator.validate(user)) {
         System.out.println("before -------");
     }
 ```
+
+## AOP 织入
++ 织入是一个生成动态代理对象并且将切面和目标对象方法编织成为约定流程的过程
++ 可以采用 接口+实现类 的方式
++ 是否拥有接口则不是Spring AOP的强制要求
++ 动态代理的也有多种实现方式。Spring采用了JDK和CGLIB
++ 当你需要使用AOP的类拥有接口时，它会以JDK动态代理运行，否则以CGLIB运行
+
 
 
