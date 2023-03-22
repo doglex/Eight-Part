@@ -39,6 +39,11 @@ Spring Boot异步 & Spring MVC 同步)
 
 ![](assets/spring3.png)
 
+
+## 路径找不到的问题
++ 可能是 scanBasePackages 扫描的位置不对
++ 可能是没写上 @ResponseBody
+
 ## Hello World
 
 + 可以通过引入依赖使用spring-boot-starter-web
@@ -464,6 +469,48 @@ if (userValidator.validate(user)) {
 + 是否拥有接口则不是Spring AOP的强制要求
 + 动态代理的也有多种实现方式。Spring采用了JDK和CGLIB
 + 当你需要使用AOP的类拥有接口时，它会以JDK动态代理运行，否则以CGLIB运行
+
+## AOP 多个切面
+``` java 
+@SpringBootApplication(scanBasePackages = {"aop_multi"})
+public class TheApplication {
+
+    @Bean(name="MyAspect1")
+    public MyAspect1 initMyAspect1() {
+        return new MyAspect1();
+    }
+
+    @Bean(name="MyAspect2")
+    public MyAspect2 initMyAspect2() {
+        return new MyAspect2();
+    }
+
+    @Bean(name="MyAspect3")
+    public MyAspect3 initMyAspect3() {
+        return new MyAspect3();
+    }
+    public static void main(String[] args) {
+        SpringApplication.run(TheApplication.class, args);
+    }
+}
+```
++ 可以用 ＠Order 注解指定切面顺序
++ 可以实现Ordered接口的getOrder方法指定切面顺序
++ 类似Koa的插件式框架
+```
+MyAspect1 before ......
+MyAspect2 before ......
+MyAspect3 before ......
+测试多个切面顺序
+MyAspect3 afterReturning ......
+MyAspect3 after ......
+MyAspect2 afterReturning ......
+MyAspect2 after ......
+MyAspect1 afterReturning ......
+MyAspect1 after ......
+```
+
+
 
 
 
