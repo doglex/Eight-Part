@@ -415,3 +415,18 @@ public class TheApplication {
 }
 ```
 
+## AOP 环绕通知around
++ 应尽量使用其他通知，除非有大的修改
+``` java 
+@Around("cut()")
+    public void around(ProceedingJoinPoint jp) throws Throwable {
+        System.out.println("before around!"); // 比@Before还前面
+        jp.proceed();  // 调用原方法，当然也可以替代为其他方法
+        System.out.println("after around!"); // 比@After还后面
+    }
+```
+
+
+
+
+
