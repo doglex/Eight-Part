@@ -400,7 +400,7 @@ public class UserController {
     }
 }
 ```
-+ 第四步，在应用中装配Aspect对象
++ 第四步，在应用中装配Aspect对象，进行拦截
 ```
 @SpringBootApplication(scanBasePackages = {"aop_demo"})
 public class TheApplication {
